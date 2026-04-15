@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__bd942949-1fee-4c27-b559-812385302984__use_figma",
+      "mcp__bd942949-1fee-4c27-b559-812385302984__get_screenshot",
+      "mcp__bd942949-1fee-4c27-b559-812385302984__get_design_context",
+      "mcp__bd942949-1fee-4c27-b559-812385302984__get_variable_defs",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npm --version)",
+      "Bash(bun --version)",
+      "Bash(deno --version)",
+      "Read(//Users/juliahollitsch/.nvm/versions/**)",
+      "Read(//usr/local/bin/**)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(brew install:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(xargs kill:*)",
+      "Bash(curl -s http://localhost:3000/api/conversation-url)",
+      "Bash(node -e ':*)",
+      "Bash(railway login:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toni</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f0f1ff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 20px;
+    }
+    .stage { width: 420px; height: 420px; }
+    .stage svg { width: 100%; height: 100%; }
+
+    .talk-section {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 500px;
+    }
+
+    .talk-box {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    .talk-box input[type="text"] {
+      flex: 1;
+      padding: 12px 18px;
+      border: 2px solid #2833AC;
+      border-radius: 999px;
+      font-size: 16px;
+      outline: none;
+      color: #0B0F31;
+    }
+    .talk-box input[type="text"]:focus { border-color: #3949F5; }
+    .talk-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 999px;
+      background: #3949F5;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .talk-btn:hover { background: #2833AC; }
+    .talk-btn:disabled { background: #aab; cursor: default; }
+
+    .convo-btn {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .convo-btn.start {
+      background: #3949F5;
+      color: white;
+    }
+    .convo-btn.start:hover { background: #2833AC; }
+    .convo-btn.stop {
+      background: #E8345A;
+      color: white;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    .convo-btn.stop:hover { background: #c02040; }
+    .convo-btn:disabled { background: #aab; cursor: default; animation: none; }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232, 52, 90, 0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(232, 52, 90, 0); }
+    }
+
+    .mic-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: white;
+    }
+    .convo-btn.stop .mic-dot {
+      background: white;
+      animation: blink-dot 1s ease-in-out infinite;
+    }
+    @keyframes blink-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .status-text {
+      font-size: 13px;
+      color: #666;
+      height: 20px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 560px;
+    }
+    .controls button {
+      padding: 8px 16px;
+      border: 2px solid #2833AC;
+      border-radius: 999px;
+      background: white;
+      color: #2833AC;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .controls button:hover { background: #3949F5; color: white; border-color: #3949F5; }
+    .controls button.active { background: #2833AC; color: white; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .stage svg { animation: float 3s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <svg id="toni" width="2404" height="2404" viewBox="0 0 2404 2404" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Body outline shadow -->
+      <path d="M259.679 1716C143.679 1467 260.367 1153.79 581.626 1070.2C902.886 986.605 1766.48 982.673 1882.89 1070.2M1882.89 1070.2C2028.4 1179.61 1550.29 1843.19 1342.41 1843.19C1194.92 1843.19 1274.58 913.746 1445.26 840.442C1502.37 815.913 1553.97 784.523 1602.81 756.357M1882.89 1070.2C1995.58 1151.53 2180.68 1273.5 2060.68 1609.5M1882.89 1070.2C1912.43 1016.07 1957.29 902.283 2217.68 969.022M1602.81 756.357C1699.91 700.352 1786.07 657.096 1882.89 705.87C2028.4 779.174 1312.87 1931.81 1022.94 1882.58C687.484 1825.61 1213.31 806.844 1602.81 756.357ZM1602.81 756.357C1436.87 1132.3 994.495 1843.19 683.776 1843.19C295.377 1843.19 1024.04 539.048 1400.4 551.083C1609.24 557.761 1479.53 917.086 1178.3 1217.34M1178.3 1217.34C936.673 1458.19 669.381 1637.95 539.358 1583.9C366.492 1512.03 453.093 966.993 733.179 756.357C1013.26 545.721 1433.22 550.493 1178.3 1217.34Z" stroke="#2833AC" stroke-width="185.994" stroke-linecap="square"/>
+      <!-- Body outline main -->
+      <path d="M209.179 1690.5C144.179 1430 212.367 1121.79 533.626 1038.2C854.886 954.605 1718.48 950.673 1834.89 1038.2M1834.89 1038.2C1980.4 1147.61 1502.29 1811.19 1294.41 1811.19C1146.92 1811.19 1226.58 881.746 1397.26 808.442C1454.37 783.913 1505.97 752.523 1554.81 724.357M1834.89 1038.2C1947.58 1119.53 2129.94 1283.6 1996.18 1576M1834.89 1038.2C1864.43 984.068 1909.29 870.283 2169.68 937.022M1554.81 724.357C1651.91 668.352 1738.07 625.096 1834.89 673.87C1980.4 747.174 1264.87 1899.81 974.942 1850.58C639.484 1793.61 1165.31 774.844 1554.81 724.357ZM1554.81 724.357C1388.87 1100.3 946.495 1811.19 635.776 1811.19C247.377 1811.19 976.037 507.048 1352.4 519.083C1561.24 525.761 1431.53 885.086 1130.3 1185.34M1130.3 1185.34C888.673 1426.19 621.381 1605.95 491.358 1551.9C318.492 1480.03 413.093 934.993 693.179 724.357C973.265 513.721 1385.22 518.493 1130.3 1185.34Z" stroke="#3949F5" stroke-width="185.994" stroke-linecap="square"/>
+
+      <!-- Face group -->
+      <g id="face">
+        <ellipse id="left-eye-white" cx="915" cy="1116" rx="180" ry="259" fill="white"/>
+        <ellipse id="right-eye-white" cx="1413" cy="1116" rx="180" ry="259" fill="white"/>
+        <g id="left-eye">
+          <circle cx="940" cy="1130" r="95" fill="#0B0F31"/>
+          <circle cx="970" cy="1095" r="28" fill="white"/>
+        </g>
+        <g id="right-eye">
+          <circle cx="1438" cy="1130" r="95" fill="#0B0F31"/>
+          <circle cx="1468" cy="1095" r="28" fill="white"/>
+        </g>
+        <path id="left-brow" d="" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none" style="display:none"/>
+        <path id="right-brow" d="" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none" style="display:none"/>
+        <g id="mouth-group"></g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="talk-section">
+    <!-- Conversation button -->
+    <button class="convo-btn start" id="convo-btn" onclick="toggleConversation()">
+      <span class="mic-dot"></span>
+      Talk to Toni
+    </button>
+
+    <!-- Text fallback -->
+    <div class="talk-box">
+      <input type="text" id="talk-input" placeholder="...or type something" />
+      <button class="talk-btn" id="speak-btn" onclick="speakText()">Speak</button>
+    </div>
+
+    <div class="status-text" id="status-text"></div>
+  </div>
+
+  <div class="controls">
+    <button onclick="setExpression('happy')" id="btn-happy" class="active">Happy</button>
+    <button onclick="setExpression('excited')" id="btn-excited">Excited</button>
+    <button onclick="setExpression('surprised')" id="btn-surprised">Surprised</button>
+    <button onclick="setExpression('sad')" id="btn-sad">Sad</button>
+    <button onclick="setExpression('angry')" id="btn-angry">Angry</button>
+    <button onclick="setExpression('love')" id="btn-love">Love</button>
+    <button onclick="setExpression('sleepy')" id="btn-sleepy">Sleepy</button>
+    <button onclick="setExpression('skeptical')" id="btn-skeptical">Skeptical</button>
+    <button onclick="setExpression('cheeky')" id="btn-cheeky">Cheeky</button>
+    <button onclick="setExpression('dead')" id="btn-dead">Dizzy</button>
+    <button onclick="setExpression('lookaway')" id="btn-lookaway">Side-eye</button>
+  </div>
+
+  <script>
+    // ---- Element refs ----
+    const leftEyeWhite = document.getElementById('left-eye-white');
+    const rightEyeWhite = document.getElementById('right-eye-white');
+    const leftEye = document.getElementById('left-eye');
+    const rightEye = document.getElementById('right-eye');
+    const leftBrow = document.getElementById('left-brow');
+    const rightBrow = document.getElementById('right-brow');
+    const mouthGroup = document.getElementById('mouth-group');
+    const statusText = document.getElementById('status-text');
+    const talkInput = document.getElementById('talk-input');
+    const speakBtn = document.getElementById('speak-btn');
+    const convoBtn = document.getElementById('convo-btn');
+
+    const DEFAULT = {
+      leftWhite: { cx: 915, cy: 1116, rx: 180, ry: 259 },
+      rightWhite: { cx: 1413, cy: 1116, rx: 180, ry: 259 },
+    };
+
+    let currentExpression = 'happy';
+    let blinkTimeout = null;
+    let speakTimeout = null;
+    let isSpeaking = false;
+    let animFrameId = null;
+
+    // Conversation state
+    let ws = null;
+    let isConversationActive = false;
+    let micStream = null;
+    let micProcessor = null;
+    let audioContext = null;
+    let playbackQueue = [];
+    let isPlaying = false;
+
+    const MX = 1161, MY = 1490;
+
+    // =============================================
+    // VISEME MOUTH SHAPES
+    // =============================================
+    const visemes = {
+      rest: () => `
+        <path d="M${MX-200} ${MY} Q${MX} ${MY+90} ${MX+200} ${MY}"
+              stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`,
+      BMP: () => `
+        <path d="M${MX-170} ${MY} L${MX+170} ${MY}"
+              stroke="#0B0F31" stroke-width="50" stroke-linecap="round" fill="none"/>`,
+      AEI: () => {
+        const w = 180, h = 110;
+        return `
+          <ellipse cx="${MX}" cy="${MY+10}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+          <rect x="${MX-w}" y="${MY-h+10}" width="${w*2}" height="40" rx="6" fill="white" opacity="0.95"/>
+          <rect x="${MX-w+15}" y="${MY+h-40}" width="${w*2-30}" height="35" rx="6" fill="white" opacity="0.95"/>
+          <ellipse cx="${MX}" cy="${MY+h-25}" rx="70" ry="42" fill="#E8345A"/>`;
+      },
+      Ee: () => {
+        const w = 185, h = 60;
+        return `
+          <ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+          <rect x="${MX-w}" y="${MY-h}" width="${w*2}" height="35" rx="6" fill="white" opacity="0.95"/>
+          <rect x="${MX-w+15}" y="${MY+h-32}" width="${w*2-30}" height="28" rx="6" fill="white" opacity="0.95"/>`;
+      },
+      UQW: () => `<ellipse cx="${MX}" cy="${MY+5}" rx="60" ry="72" fill="#0B0F31"/>`,
+      O: () => `<ellipse cx="${MX}" cy="${MY+5}" rx="85" ry="95" fill="#0B0F31"/>`,
+      CDNSTZ: () => {
+        const w = 155, h = 38;
+        return `
+          <ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+          <rect x="${MX-w+10}" y="${MY-8}" width="${(w-10)*2}" height="16" rx="4" fill="white" opacity="0.95"/>`;
+      },
+      GK: () => {
+        const w = 160, h = 55;
+        return `
+          <ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+          <rect x="${MX-w}" y="${MY-h}" width="${w*2}" height="30" rx="6" fill="white" opacity="0.95"/>
+          <rect x="${MX-w+15}" y="${MY+h-28}" width="${w*2-30}" height="24" rx="6" fill="white" opacity="0.95"/>`;
+      },
+      Th: () => {
+        const w = 140, h = 35;
+        return `
+          <ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+          <rect x="${MX-w+5}" y="${MY-h}" width="${(w-5)*2}" height="25" rx="5" fill="white" opacity="0.95"/>
+          <ellipse cx="${MX}" cy="${MY+h-8}" rx="50" ry="22" fill="#E8345A"/>`;
+      },
+      FV: () => {
+        const w = 155, h = 30;
+        return `
+          <path d="M${MX-w} ${MY-5} Q${MX} ${MY-h-10} ${MX+w} ${MY-5}" stroke="#0B0F31" stroke-width="6" fill="none"/>
+          <ellipse cx="${MX}" cy="${MY+5}" rx="${w-10}" ry="${h-5}" fill="#0B0F31"/>
+          <rect x="${MX-w+10}" y="${MY-h+15}" width="${(w-10)*2}" height="22" rx="4" fill="white" opacity="0.95"/>`;
+      },
+      L: () => {
+        const w = 165, h = 80;
+        return `
+          <ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+          <rect x="${MX-w}" y="${MY-h+5}" width="${w*2}" height="32" rx="6" fill="white" opacity="0.95"/>
+          <rect x="${MX-w+15}" y="${MY+h-28}" width="${w*2-30}" height="24" rx="6" fill="white" opacity="0.95"/>
+          <ellipse cx="${MX}" cy="${MY-h+40}" rx="45" ry="28" fill="#E8345A"/>`;
+      },
+      R: () => {
+        const w = 120, h = 65;
+        return `
+          <ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+          <rect x="${MX-w}" y="${MY-h+5}" width="${w*2}" height="28" rx="5" fill="white" opacity="0.95"/>`;
+      },
+      H: () => {
+        const w = 160, h = 90;
+        return `
+          <ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+          <rect x="${MX-w}" y="${MY-h+5}" width="${w*2}" height="30" rx="6" fill="white" opacity="0.95"/>`;
+      },
+    };
+
+    // Volume-to-mouth for audio analysis (5 levels)
+    const volumeMouths = [
+      () => visemes.rest(),
+      () => visemes.BMP(),
+      () => visemes.CDNSTZ(),
+      () => visemes.Ee(),
+      () => visemes.AEI(),
+    ];
+
+    // Letter-to-viseme for text mode
+    const letterToViseme = {
+      'a':'AEI','b':'BMP','c':'CDNSTZ','d':'CDNSTZ','e':'Ee','f':'FV',
+      'g':'GK','h':'H','i':'AEI','j':'CDNSTZ','k':'GK','l':'L',
+      'm':'BMP','n':'CDNSTZ','o':'O','p':'BMP','q':'UQW','r':'R',
+      's':'CDNSTZ','t':'CDNSTZ','u':'UQW','v':'FV','w':'UQW',
+      'x':'CDNSTZ','y':'CDNSTZ','z':'CDNSTZ',
+    };
+
+    function textToVisemes(text) {
+      const result = [];
+      const lower = text.toLowerCase();
+      let i = 0;
+      while (i < lower.length) {
+        if (i < lower.length - 1 && lower[i] === 't' && lower[i+1] === 'h') {
+          result.push({ viseme: 'Th', char: 'th' }); i += 2; continue;
+        }
+        const ch = lower[i];
+        if (letterToViseme[ch]) result.push({ viseme: letterToViseme[ch], char: ch });
+        else if (ch === ' ') result.push({ viseme: 'rest', char: ' ' });
+        i++;
+      }
+      return result;
+    }
+
+    function setViseme(name) {
+      const fn = visemes[name];
+      if (fn) mouthGroup.innerHTML = fn();
+    }
+
+    // =============================================
+    // TEXT-ONLY SPEAK (letter visemes)
+    // =============================================
+    function speakText() {
+      const text = talkInput.value.trim();
+      if (!text || isSpeaking) return;
+      isSpeaking = true;
+      speakBtn.disabled = true;
+      speakBtn.textContent = 'Speaking...';
+      setEye('left', { type: 'normal', cx: 925, cy: 1120 });
+      setEye('right', { type: 'normal', cx: 1430, cy: 1120 });
+
+      const sequence = textToVisemes(text);
+      let idx = 0;
+      function next() {
+        if (idx >= sequence.length) { finishSpeaking(); return; }
+        const { viseme, char } = sequence[idx];
+        setViseme(viseme);
+        statusText.textContent = `"${char === ' ' ? '␣' : char}" → ${viseme}`;
+        idx++;
+        let delay = 110;
+        if (char === ' ') delay = 200;
+        else if (idx < sequence.length && sequence[idx].viseme === viseme) delay = 90;
+        speakTimeout = setTimeout(next, delay);
+      }
+      next();
+    }
+
+    function finishSpeaking() {
+      setViseme('rest');
+      statusText.textContent = '';
+      isSpeaking = false;
+      speakBtn.disabled = false;
+      speakBtn.textContent = 'Speak';
+      setExpression(currentExpression);
+    }
+
+    talkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') speakText(); });
+
+    // =============================================
+    // ELEVENLABS CONVERSATIONAL AI
+    // =============================================
+    async function toggleConversation() {
+      if (isConversationActive) {
+        stopConversation();
+      } else {
+        await startConversation();
+      }
+    }
+
+    async function startConversation() {
+      convoBtn.disabled = true;
+      statusText.textContent = 'Connecting...';
+
+      try {
+        // Get signed URL from our backend
+        const res = await fetch('/api/conversation-url');
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const { signedUrl } = await res.json();
+
+        // Set up audio context (default sample rate for playback, mic will be resampled)
+        audioContext = new AudioContext();
+
+        // Get mic access
+        micStream = await navigator.mediaDevices.getUserMedia({
+          audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
+        });
+
+        // Connect WebSocket
+        ws = new WebSocket(signedUrl);
+        ws.binaryType = 'arraybuffer';
+
+        ws.onopen = () => {
+          isConversationActive = true;
+          convoBtn.disabled = false;
+          convoBtn.className = 'convo-btn stop';
+          convoBtn.innerHTML = '<span class="mic-dot"></span> End conversation';
+          statusText.textContent = 'Listening...';
+          console.log('WebSocket connected');
+
+          // Start sending mic audio
+          startMicCapture();
+
+          // Keep-alive ping every 10s
+          ws._pingInterval = setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ type: 'ping' }));
+            }
+          }, 10000);
+        };
+
+        ws.onmessage = (event) => {
+          if (typeof event.data === 'string') {
+            const msg = JSON.parse(event.data);
+            handleWSMessage(msg);
+          } else {
+            // Binary audio data from agent
+            handleAudioChunk(event.data);
+          }
+        };
+
+        ws.onerror = (err) => {
+          console.error('WebSocket error:', err);
+          statusText.textContent = 'Connection error';
+          stopConversation();
+        };
+
+        ws.onclose = (event) => {
+          console.log('WebSocket closed:', event.code, event.reason);
+          if (ws?._pingInterval) clearInterval(ws._pingInterval);
+          if (isConversationActive) {
+            statusText.textContent = `Connection closed (${event.code})`;
+            stopConversation();
+          }
+        };
+
+      } catch (err) {
+        console.error('Failed to start conversation:', err);
+        if (err.name === 'NotAllowedError') {
+          statusText.textContent = 'Mic access denied — allow microphone or open in a browser tab';
+        } else {
+          statusText.textContent = `Error: ${err.message}`;
+        }
+        convoBtn.disabled = false;
+        convoBtn.className = 'convo-btn start';
+        convoBtn.innerHTML = '<span class="mic-dot"></span> Talk to Toni';
+      }
+    }
+
+    function stopConversation() {
+      isConversationActive = false;
+
+      if (ws) { if (ws._pingInterval) clearInterval(ws._pingInterval); ws.close(); ws = null; }
+      if (micProcessor) { micProcessor.disconnect(); micProcessor = null; }
+      if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+      if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+
+      playbackQueue = [];
+      isPlaying = false;
+
+      convoBtn.disabled = false;
+      convoBtn.className = 'convo-btn start';
+      convoBtn.innerHTML = '<span class="mic-dot"></span> Talk to Toni';
+      statusText.textContent = '';
+      setExpression(currentExpression);
+    }
+
+    function handleWSMessage(msg) {
+      console.log('WS message:', msg.type, msg);
+      switch (msg.type) {
+        case 'conversation_initiation_metadata':
+          agentAudioFormat = msg.conversation_initiation_metadata_event?.agent_output_audio_format || 'pcm_16000';
+          console.log('Agent audio format:', agentAudioFormat);
+          statusText.textContent = 'Connected! Start speaking...';
+          break;
+        case 'agent_response':
+          statusText.textContent = `Toni: "${msg.agent_response_event?.agent_response || ''}"`;
+          break;
+        case 'user_transcript':
+          statusText.textContent = `You: "${msg.user_transcription_event?.user_transcript || ''}"`;
+          break;
+        case 'audio':
+          if (msg.audio_event?.audio_base_64) {
+            handleAudioChunk(msg.audio_event.audio_base_64);
+          }
+          break;
+        case 'ping':
+          if (ws && ws.readyState === WebSocket.OPEN) {
+            const eventId = msg.ping_event?.event_id;
+            console.log('Responding to ping with event_id:', eventId);
+            ws.send(JSON.stringify({ type: 'pong', event_id: eventId }));
+          }
+          break;
+        case 'interruption':
+          // User interrupted — stop playback
+          clearPlaybackQueue();
+          break;
+      }
+    }
+
+    let agentAudioFormat = 'pcm_16000';
+
+    // ---- Mic capture → downsample to 16kHz → send PCM to WebSocket ----
+    function startMicCapture() {
+      const source = audioContext.createMediaStreamSource(micStream);
+      const inputSampleRate = audioContext.sampleRate;
+      const targetSampleRate = 16000;
+      const ratio = inputSampleRate / targetSampleRate;
+
+      micProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+
+      let micChunkCount = 0;
+      micProcessor.onaudioprocess = (e) => {
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        const input = e.inputBuffer.getChannelData(0);
+
+        // Downsample from native rate (e.g. 48000) to 16000
+        const outputLength = Math.floor(input.length / ratio);
+        const pcm = new Int16Array(outputLength);
+        for (let i = 0; i < outputLength; i++) {
+          const srcIndex = Math.floor(i * ratio);
+          const s = Math.max(-1, Math.min(1, input[srcIndex]));
+          pcm[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+        }
+
+        const bytes = new Uint8Array(pcm.buffer);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+        ws.send(JSON.stringify({ user_audio_chunk: btoa(binary) }));
+        micChunkCount++;
+        if (micChunkCount % 50 === 1) console.log('Mic sending chunk #' + micChunkCount, 'samples:', outputLength);
+      };
+
+      // Connect through a silent gain node (ScriptProcessor must be connected
+      // to destination to work, but we don't want mic audio played back)
+      const silentGain = audioContext.createGain();
+      silentGain.gain.value = 0;
+      source.connect(micProcessor);
+      micProcessor.connect(silentGain);
+      silentGain.connect(audioContext.destination);
+    }
+
+    // ---- Play agent audio (PCM 16-bit 16kHz) + mouth sync ----
+    let pcmBuffer = [];    // accumulate PCM samples
+    let isPlayingAudio = false;
+    let playbackGain = null;
+    let playbackAnalyser = null;
+
+    function handleAudioChunk(base64) {
+      // Decode base64 → Int16 PCM
+      const raw = atob(base64);
+      const bytes = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+      const int16 = new Int16Array(bytes.buffer);
+
+      // Convert Int16 → Float32
+      const float32 = new Float32Array(int16.length);
+      for (let i = 0; i < int16.length; i++) {
+        float32[i] = int16[i] / 32768;
+      }
+
+      pcmBuffer.push(float32);
+
+      // Start playback if not already playing
+      if (!isPlayingAudio) {
+        isPlayingAudio = true;
+        schedulePlayback();
+        if (!animFrameId) startMouthSync();
+      }
+    }
+
+    function schedulePlayback() {
+      if (pcmBuffer.length === 0) {
+        isPlayingAudio = false;
+        // Small delay before returning to rest (more chunks might arrive)
+        setTimeout(() => {
+          if (!isPlayingAudio) {
+            if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+            setViseme('rest');
+            if (isConversationActive) statusText.textContent = 'Listening...';
+          }
+        }, 300);
+        return;
+      }
+
+      const samples = pcmBuffer.shift();
+      const sampleRate = 16000;
+
+      // Create AudioBuffer from PCM float32
+      const audioBuffer = audioContext.createBuffer(1, samples.length, sampleRate);
+      audioBuffer.getChannelData(0).set(samples);
+
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+
+      // Set up analyser for mouth sync
+      if (!playbackAnalyser) {
+        playbackAnalyser = audioContext.createAnalyser();
+        playbackAnalyser.fftSize = 256;
+        playbackAnalyser.smoothingTimeConstant = 0.3;
+      }
+      if (!playbackGain) {
+        playbackGain = audioContext.createGain();
+        playbackGain.gain.value = 1.0;
+        playbackGain.connect(playbackAnalyser);
+        playbackAnalyser.connect(audioContext.destination);
+      }
+
+      source.connect(playbackGain);
+      source.onended = () => schedulePlayback();
+      source.start();
+    }
+
+    function clearPlaybackQueue() {
+      pcmBuffer = [];
+      isPlayingAudio = false;
+      if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+      setViseme('rest');
+    }
+
+    function startMouthSync() {
+      const dataArray = new Uint8Array(playbackAnalyser.frequencyBinCount);
+
+      function sync() {
+        if (!isPlayingAudio && pcmBuffer.length === 0) {
+          setViseme('rest');
+          animFrameId = null;
+          return;
+        }
+
+        playbackAnalyser.getByteFrequencyData(dataArray);
+        let sum = 0;
+        const start = 1, end = Math.min(30, dataArray.length);
+        for (let i = start; i < end; i++) sum += dataArray[i];
+        const avg = sum / (end - start);
+
+        let level;
+        if (avg < 5) level = 0;
+        else if (avg < 25) level = 1;
+        else if (avg < 55) level = 2;
+        else if (avg < 100) level = 3;
+        else level = 4;
+
+        mouthGroup.innerHTML = volumeMouths[level]();
+        animFrameId = requestAnimationFrame(sync);
+      }
+      sync();
+    }
+
+    // =============================================
+    // EYE HELPERS
+    // =============================================
+    function setEyeWhite(id, props) {
+      const el = id === 'left' ? leftEyeWhite : rightEyeWhite;
+      const d = id === 'left' ? DEFAULT.leftWhite : DEFAULT.rightWhite;
+      el.setAttribute('cx', props.cx ?? d.cx);
+      el.setAttribute('cy', props.cy ?? d.cy);
+      el.setAttribute('rx', props.rx ?? d.rx);
+      el.setAttribute('ry', props.ry ?? d.ry);
+      el.style.display = props.hidden ? 'none' : '';
+    }
+
+    function setEye(id, props) {
+      const g = id === 'left' ? leftEye : rightEye;
+      const defaults = id === 'left' ? { cx: 940, cy: 1130, r: 95 } : { cx: 1438, cy: 1130, r: 95 };
+      g.innerHTML = '';
+      g.style.display = props.hidden ? 'none' : '';
+
+      if (props.type === 'normal' || !props.type) {
+        const cx = props.cx ?? defaults.cx, cy = props.cy ?? defaults.cy, r = props.r ?? defaults.r;
+        g.innerHTML = `
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="${props.fill ?? '#0B0F31'}"/>
+          <circle cx="${cx + (props.hlX ?? 30)}" cy="${cy + (props.hlY ?? -35)}" r="${props.hlR ?? 28}" fill="white"/>`;
+      } else if (props.type === 'closed-happy') {
+        const cx = id === 'left' ? 915 : 1413;
+        g.innerHTML = `<path d="M${cx-90} 1150 Q${cx} 1040 ${cx+90} 1150" stroke="#0B0F31" stroke-width="50" stroke-linecap="round" fill="none"/>`;
+      } else if (props.type === 'closed-sleepy') {
+        const cx = id === 'left' ? 915 : 1413;
+        g.innerHTML = `<line x1="${cx-85}" y1="1130" x2="${cx+85}" y2="1130" stroke="#0B0F31" stroke-width="50" stroke-linecap="round"/>`;
+      } else if (props.type === 'x') {
+        const cx = id === 'left' ? 915 : 1413, cy = 1116;
+        g.innerHTML = `
+          <line x1="${cx-65}" y1="${cy-65}" x2="${cx+65}" y2="${cy+65}" stroke="#0B0F31" stroke-width="50" stroke-linecap="round"/>
+          <line x1="${cx+65}" y1="${cy-65}" x2="${cx-65}" y2="${cy+65}" stroke="#0B0F31" stroke-width="50" stroke-linecap="round"/>`;
+      } else if (props.type === 'heart') {
+        const cx = id === 'left' ? 915 : 1413, cy = 1116, s = props.scale ?? 1;
+        g.innerHTML = `<path d="M${cx} ${cy+50*s} L${cx-70*s} ${cy-10*s} A${50*s} ${50*s} 0 0 1 ${cx} ${cy-55*s} A${50*s} ${50*s} 0 0 1 ${cx+70*s} ${cy-10*s} Z" fill="#E8345A"/>`;
+      } else if (props.type === 'wink') {
+        const cx = id === 'left' ? 915 : 1413;
+        g.innerHTML = `<path d="M${cx-80} 1130 Q${cx} 1180 ${cx+80} 1130" stroke="#0B0F31" stroke-width="48" stroke-linecap="round" fill="none"/>`;
+      }
+    }
+
+    function setBrow(id, props) {
+      const el = id === 'left' ? leftBrow : rightBrow;
+      if (!props || props.hidden) { el.style.display = 'none'; return; }
+      el.style.display = '';
+      el.setAttribute('d', props.d);
+    }
+
+    // =============================================
+    // BLINKING
+    // =============================================
+    const NO_BLINK = ['love', 'sleepy', 'dead', 'cheeky'];
+
+    function scheduleBlink() {
+      if (blinkTimeout) clearTimeout(blinkTimeout);
+      blinkTimeout = setTimeout(() => {
+        if (NO_BLINK.includes(currentExpression) && !isSpeaking && !isConversationActive) {
+          scheduleBlink(); return;
+        }
+        doBlink();
+      }, 2200 + Math.random() * 2000);
+    }
+
+    function doBlink() {
+      const savedL = leftEye.innerHTML, savedR = rightEye.innerHTML;
+      const savedLRy = leftEyeWhite.getAttribute('ry'), savedRRy = rightEyeWhite.getAttribute('ry');
+      const savedLCy = leftEyeWhite.getAttribute('cy'), savedRCy = rightEyeWhite.getAttribute('cy');
+
+      leftEyeWhite.setAttribute('ry', '30'); rightEyeWhite.setAttribute('ry', '30');
+      leftEyeWhite.setAttribute('cy', '1140'); rightEyeWhite.setAttribute('cy', '1140');
+      leftEye.innerHTML = ''; rightEye.innerHTML = '';
+
+      setTimeout(() => {
+        leftEyeWhite.setAttribute('ry', savedLRy); rightEyeWhite.setAttribute('ry', savedRRy);
+        leftEyeWhite.setAttribute('cy', savedLCy); rightEyeWhite.setAttribute('cy', savedRCy);
+        leftEye.innerHTML = savedL; rightEye.innerHTML = savedR;
+        scheduleBlink();
+      }, 120);
+    }
+
+    // =============================================
+    // EXPRESSIONS
+    // =============================================
+    function resetFace() {
+      if (speakTimeout) { clearTimeout(speakTimeout); speakTimeout = null; }
+      if (animFrameId && !isConversationActive) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+      isSpeaking = false;
+      speakBtn.disabled = false;
+      speakBtn.textContent = 'Speak';
+      setEyeWhite('left', {});
+      setEyeWhite('right', {});
+      setEye('left', { type: 'normal' });
+      setEye('right', { type: 'normal' });
+      setBrow('left', { hidden: true });
+      setBrow('right', { hidden: true });
+      setViseme('rest');
+      if (!isConversationActive) statusText.textContent = '';
+      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+    }
+
+    function setExpression(expr) {
+      resetFace();
+      currentExpression = expr;
+      const btn = document.getElementById('btn-' + expr);
+      if (btn) btn.classList.add('active');
+
+      switch (expr) {
+        case 'happy':
+          setViseme('rest');
+          break;
+        case 'excited':
+          setEye('left', { type: 'closed-happy' });
+          setEye('right', { type: 'closed-happy' });
+          setEyeWhite('left', { hidden: true });
+          setEyeWhite('right', { hidden: true });
+          mouthGroup.innerHTML = visemes.AEI();
+          break;
+        case 'surprised':
+          setEyeWhite('left', { ry: 280 });
+          setEyeWhite('right', { ry: 280 });
+          setEye('left', { type: 'normal', r: 80, cy: 1120, hlR: 24 });
+          setEye('right', { type: 'normal', r: 80, cy: 1120, hlR: 24 });
+          setBrow('left', { d: 'M810 815 Q915 770 1020 815' });
+          setBrow('right', { d: 'M1308 815 Q1413 770 1518 815' });
+          setViseme('O');
+          break;
+        case 'sad':
+          setEyeWhite('left', { ry: 220, cy: 1130 });
+          setEyeWhite('right', { ry: 220, cy: 1130 });
+          setEye('left', { type: 'normal', cy: 1150, r: 85, hlY: -28 });
+          setEye('right', { type: 'normal', cy: 1150, r: 85, hlY: -28 });
+          setBrow('left', { d: 'M810 855 Q910 810 1020 870' });
+          setBrow('right', { d: 'M1308 870 Q1418 810 1518 855' });
+          mouthGroup.innerHTML = `<path d="M${MX-180} ${MY+40} Q${MX} ${MY-50} ${MX+180} ${MY+40}" stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`;
+          break;
+        case 'angry':
+          setEyeWhite('left', { ry: 200, cy: 1130 });
+          setEyeWhite('right', { ry: 200, cy: 1130 });
+          setEye('left', { type: 'normal', cy: 1140, r: 90 });
+          setEye('right', { type: 'normal', cy: 1140, r: 90 });
+          setBrow('left', { d: 'M790 830 L1040 895' });
+          setBrow('right', { d: 'M1288 895 L1538 830' });
+          setViseme('BMP');
+          break;
+        case 'love':
+          setEye('left', { type: 'heart', scale: 1.2 });
+          setEye('right', { type: 'heart', scale: 1.2 });
+          mouthGroup.innerHTML = `<path d="M${MX-200} ${MY} Q${MX} ${MY+110} ${MX+200} ${MY}" stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`;
+          break;
+        case 'sleepy':
+          setEye('left', { type: 'closed-sleepy' });
+          setEye('right', { type: 'closed-sleepy' });
+          setEyeWhite('left', { ry: 160, cy: 1130 });
+          setEyeWhite('right', { ry: 160, cy: 1130 });
+          mouthGroup.innerHTML = `<path d="M${MX-80} ${MY} Q${MX} ${MY+40} ${MX+80} ${MY}" stroke="#0B0F31" stroke-width="40" stroke-linecap="round" fill="none"/>`;
+          break;
+        case 'skeptical':
+          setEyeWhite('right', { ry: 170, cy: 1140 });
+          setEye('left', { type: 'normal', cx: 950, cy: 1130 });
+          setEye('right', { type: 'normal', cx: 1445, cy: 1145, r: 80 });
+          setBrow('left', { d: 'M810 800 Q915 770 1020 800' });
+          mouthGroup.innerHTML = `<path d="M${MX-170} ${MY+10} Q${MX-50} ${MY+50} ${MX+170} ${MY-20}" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none"/>`;
+          break;
+        case 'cheeky':
+          setEye('left', { type: 'normal', cx: 935, cy: 1120 });
+          setEye('right', { type: 'wink' });
+          setEyeWhite('right', { ry: 170, cy: 1130 });
+          mouthGroup.innerHTML = visemes.AEI();
+          break;
+        case 'dead':
+          setEye('left', { type: 'x' });
+          setEye('right', { type: 'x' });
+          setEyeWhite('left', { hidden: true });
+          setEyeWhite('right', { hidden: true });
+          mouthGroup.innerHTML = `<path d="M${MX-170} ${MY} Q${MX-80} ${MY-30} ${MX} ${MY+10} Q${MX+80} ${MY+40} ${MX+170} ${MY-10}" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none"/>`;
+          break;
+        case 'lookaway':
+          setEye('left', { type: 'normal', cx: 870, cy: 1110, hlX: 25, hlY: -30 });
+          setEye('right', { type: 'normal', cx: 1370, cy: 1110, hlX: 25, hlY: -30 });
+          mouthGroup.innerHTML = `<path d="M${MX-100} ${MY} Q${MX} ${MY+40} ${MX+100} ${MY}" stroke="#0B0F31" stroke-width="42" stroke-linecap="round" fill="none"/>`;
+          break;
+      }
+      scheduleBlink();
+    }
+
+    // Init
+    setExpression('happy');
+    scheduleBlink();
+  </script>
+</body>
+</html>
