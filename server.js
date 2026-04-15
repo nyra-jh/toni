@@ -32,10 +32,7 @@ async function ensureAgent() {
         language: "en",
       },
       tts: {
-        modelId: "eleven_flash_v2",          // fast + stable for conversational AI
         voiceId: "EXAVITQu4vr4xnSDxMaL",  // Bella
-        stability: 0.8,                    // higher = more consistent voice
-        similarityBoost: 0.8,              // higher = stays closer to the voice
       },
     },
   });
