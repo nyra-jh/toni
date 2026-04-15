@@ -28,9 +28,13 @@ async function ensureAgent() {
             "Keep your responses brief — 1 to 3 sentences max. Be warm and fun!",
         },
         firstMessage: "Hey there! I'm Toni! What's on your mind?",
+        language: "en",
       },
       tts: {
-        voiceId: "EXAVITQu4vr4xnSDxMaL", // Bella — friendly voice
+        modelId: "eleven_turbo_v2_5",     // fastest + most stable model
+        voiceId: "EXAVITQu4vr4xnSDxMaL",  // Bella
+        stability: 0.8,                    // higher = more consistent voice
+        similarityBoost: 0.8,              // higher = stays closer to the voice
       },
     },
   });
