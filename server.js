@@ -224,7 +224,7 @@ app.post("/api/chat", async (req, res) => {
     // Convert response to speech
     const audioStream = await elevenlabs.textToSpeech.convert(voice.id, {
       text: response,
-      modelId: "eleven_multilingual_v2",
+      modelId: "eleven_flash_v2_5",
     });
 
     const chunks = [];
