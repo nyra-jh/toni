@@ -653,6 +653,7 @@
     // Voice conversation state
     let ws = null;
     let isConversationActive = false;
+    let hasUserSpoken = false; // suppress agent greeting audio until user speaks
     let micStream = null;
     let micProcessor = null;
     let audioContext = null;
@@ -1012,6 +1013,7 @@
           inputMode = 'voice';
           micBtn.disabled = false;
           micBtn.classList.add('recording');
+          quickReplies.style.display = 'none';
           inputField.placeholder = 'Listening... tap mic to stop';
           inputField.disabled = true;
           startMicCapture();
@@ -1049,6 +1051,7 @@
     function stopConversation() {
       isConversationActive = false;
       inputMode = 'text';
+      hasUserSpoken = false;
 
       if (ws) { if (ws._pingInterval) clearInterval(ws._pingInterval); ws.close(); ws = null; }
       if (micProcessor) { micProcessor.disconnect(); micProcessor = null; }
@@ -1076,10 +1079,10 @@
           break;
         case 'user_transcript':
           const userText = msg.user_transcription_event?.user_transcript || '';
-          if (userText) addMessage(userText, 'user');
+          if (userText) { hasUserSpoken = true; addMessage(userText, 'user'); }
           break;
         case 'audio':
-          if (msg.audio_event?.audio_base_64) handleStreamAudioChunk(msg.audio_event.audio_base_64);
+          if (msg.audio_event?.audio_base_64 && hasUserSpoken) handleStreamAudioChunk(msg.audio_event.audio_base_64);
           break;
         case 'ping':
           if (ws && ws.readyState === WebSocket.OPEN) {
