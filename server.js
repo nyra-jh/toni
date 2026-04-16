@@ -38,28 +38,28 @@ const FAQ_ENTRIES = [
   { q: "welche erkrankungen", a: "myReha kann bei Rehabilitation nach Schlaganfällen, Hirnblutungen, Multipler Sklerose, Morbus Parkinson, Schädel-Hirn-Trauma und anderen neurologischen Erkrankungen helfen." },
   { q: "für wen geeignet", a: "myReha ist für Menschen mit Sprachstörungen wie Aphasie oder kognitiven Defiziten nach neurologischen Erkrankungen geeignet — unabhängig vom Schweregrad!" },
   { q: "medizinprodukt zertifiziert ce", a: "Ja! myReha hat ein CE-Kennzeichen. Das bedeutet, dass alle Sicherheits- und Gesundheitsanforderungen eingehalten werden und strenge medizinische und Datenschutzprüfungen bestanden wurden." },
-  { q: "vorteile vergleich andere apps", a: "myReha ist die einzige Lösung mit über 65.000 Aufgaben und künstlicher Intelligenz für personalisierte Trainingspläne — und das als zertifiziertes Medizinprodukt!" },
+  { q: "vorteile vergleich andere apps", a: "myReha ist die einzige Lösung mit über fünfundsechzigtausend Aufgaben und künstlicher Intelligenz für personalisierte Trainingspläne — und das als zertifiziertes Medizinprodukt!" },
   { q: "medizinische inhalte woher", a: "Die Inhalte wurden von einem interdisziplinären Team aus Medizin, Logopädie, Ergotherapie und Neuropsychologie nach Gold-Standard-Methoden entwickelt." },
   { q: "wer steckt dahinter gegründet", a: "myReha wurde von Dr. Philipp Schöllauf gegründet, zusammen mit einem Team aus Therapeuten und Ärzten, in Zusammenarbeit mit der Neurologischen Abteilung einer Klinik in Wien und Experten der Medizinischen Universität Wien." },
   { q: "wie bekomme ich die app download", a: "Du kannst myReha im Apple App Store und im Google Play Store herunterladen — einfach nach 'myReha' suchen!" },
   { q: "wie installiere ich", a: "Lade die App aus dem App Store herunter, installiere sie und klicke auf 'Neuen Zugang erstellen'. Dann einfach der Registrierung folgen!" },
-  { q: "geräteanforderungen geräte kompatibel", a: "iPhones und iPads brauchen mindestens iOS 16.0, Android-Geräte mindestens Android 6.0." },
+  { q: "geräteanforderungen geräte kompatibel", a: "iPhones und iPads brauchen mindestens iOS sechzehn, Android-Geräte mindestens Android sechs." },
   { q: "wie wird die app angewendet", a: "Du kannst myReha auf deinem Smartphone oder Tablet nutzen — zeit- und ortsunabhängig, so oft du möchtest!" },
-  { q: "wie lange nutzen wie oft", a: "Wir empfehlen mindestens eine dreimonatige Rehaphase mit mindestens 4 Stunden pro Woche. Langfristige Nutzung ist sehr sinnvoll!" },
+  { q: "wie lange nutzen wie oft", a: "Wir empfehlen mindestens eine dreimonatige Rehaphase mit mindestens vier Stunden pro Woche. Langfristige Nutzung ist sehr sinnvoll!" },
   { q: "welche übungen muss ich machen therapieplan", a: "Du bekommst einen persönlichen Therapieplan, der sich automatisch an deinen Fortschritt anpasst. Er basiert auf deiner Selbsteinschätzung oder den Empfehlungen deines Therapeuten." },
   { q: "übungen zugeschnitten angepasst", a: "Die App lernt mit dir mit! Sie misst deine Leistung in jeder Übung und bietet dir fortlaufend passende, angepasste Übungen." },
   { q: "übungsplan anpassen", a: "Der Plan passt sich automatisch an deinen Fortschritt an. Du kannst aber auch manuell Anpassungen in den App-Einstellungen vornehmen." },
   { q: "angehörigen hilfe brauche ich jemanden", a: "Nein, du kannst myReha ganz selbstständig und ohne Hilfe verwenden! Die App ist so gestaltet, dass alles verständlich ist." },
   { q: "schlaganfall verwenden", a: "Ja, die App wurde in intensiver Zusammenarbeit mit Schlaganfallpatienten entwickelt und ist speziell auf ihre Bedürfnisse angepasst!" },
   { q: "ohne therapeuten arzt alleine", a: "Ja! Du kannst hochwertige Reha ganz selbstständig machen — von zu Hause aus oder sogar im Urlaub." },
-  { q: "praxis therapeuten version", a: "Ja! Es gibt eine Praxis-Version für Therapeuten mit dem kompletten Übungskatalog aus über 65.000 Aufgaben und einem Fortschritts-Dashboard." },
+  { q: "praxis therapeuten version", a: "Ja! Es gibt eine Praxis-Version für Therapeuten mit dem kompletten Übungskatalog aus über fünfundsechzigtausend Aufgaben und einem Fortschritts-Dashboard." },
   { q: "klinik zuhause weitermachen", a: "Ja! Du kannst dich mit deinen Klinik-Zugangsdaten anmelden oder dich neu auf deinem privaten Gerät registrieren." },
   { q: "therapiestunde gemeinsam therapeut", a: "Ja! myReha ist eine großartige Ergänzung zur Therapiestunde. Dein Therapieteam kann auch deine Fortschritte analysieren." },
-  { q: "kosten kostenpflichtig preis", a: "myReha bietet Premium-Abos: 69,99€ pro Monat, 63,33€ bei 3 Monaten oder 58,33€ bei 6 Monaten. Viele Krankenkassen übernehmen die Kosten!" },
+  { q: "kosten kostenpflichtig preis", a: "myReha bietet Premium-Abos: neunundsechzig Euro neunundneunzig pro Monat, dreiundsechzig Euro dreiunddreißig bei drei Monaten oder achtundfünfzig Euro dreiunddreißig bei sechs Monaten. Viele Krankenkassen übernehmen die Kosten!" },
   { q: "krankenkasse übernehmen versicherung", a: "Ja! Zahlreiche Krankenkassen übernehmen die Kosten für myReha. Bei der Registrierung werden deine Angaben geprüft." },
   { q: "testphase kostenlos testen", a: "Ja! Nach dem Download kannst du eine limitierte Basis-Version ganz ohne Zahlungsdaten und Kosten nutzen." },
-  { q: "premium abo vorteile", a: "Das Premium-Abo bietet dir einen individuellen Therapieplan, Zugang zu über 65.000 Aufgaben und Echtzeit-Erfolgskontrolle. Du kannst es in den App-Einstellungen erwerben." },
-  { q: "welches abo nehmen", a: "Zum Schnuppern eignet sich das 1-Monats-Abo. Für eine richtige Reha empfehle ich die drei- oder sechsmonatigen Abos — die sind auch günstiger pro Monat!" },
+  { q: "premium abo vorteile", a: "Das Premium-Abo bietet dir einen individuellen Therapieplan, Zugang zu über fünfundsechzigtausend Aufgaben und Echtzeit-Erfolgskontrolle. Du kannst es in den App-Einstellungen erwerben." },
+  { q: "welches abo nehmen", a: "Zum Schnuppern eignet sich das Einmonats-Abo. Für eine richtige Reha empfehle ich die drei- oder sechsmonatigen Abos — die sind auch günstiger pro Monat!" },
   { q: "abo kündigen", a: "Ja, du kannst jederzeit einfach und schnell kündigen — über die Einstellungen deines Geräts, ganz ohne Probleme!" },
   { q: "rechnung bezahlen", a: "Ja! Bei Problemen kannst du auch direkt an support@nyra.health schreiben. Rechnungen kommen vom App Store-Anbieter und sind über deine Geräte-Einstellungen abrufbar." },
   { q: "daten sicherheit datenschutz dsgvo", a: "Deine Daten sind sicher! Sie werden anonym und ausschließlich für deinen persönlichen Übungsplan verwendet. Alles läuft über europäische Server mit höchsten ISO-zertifizierten Sicherheitsstandards — vollständig DSGVO-konform!" },
@@ -83,7 +83,7 @@ const FAQ_ENTRIES = [
   { q: "support kontaktieren hilfe", a: "Du erreichst den Support per E-Mail an support@nyra.health, über das Kontaktformular in der App oder über deine betreuende Einrichtung." },
   { q: "zugangscode nicht erhalten", a: "Prüfe deinen Spam-Ordner! Falls du ihn nicht findest, frag bei deiner Klinik, Versicherung oder beim Support nach." },
   { q: "account löschen", a: "Ja, über den Support kannst du eine vollständige Löschung deiner Daten beantragen." },
-  { q: "nicht kompatibel gerät alt", a: "Prüfe ob dein Gerät die Mindestanforderungen erfüllt: iOS 16.0 oder Android 6.0. Bei älteren Geräten kann es leider Einschränkungen geben." },
+  { q: "nicht kompatibel gerät alt", a: "Prüfe ob dein Gerät die Mindestanforderungen erfüllt: iOS sechzehn oder Android sechs. Bei älteren Geräten kann es leider Einschränkungen geben." },
 ];
 
 const TONI_SYSTEM_PROMPT =
@@ -224,7 +224,7 @@ app.post("/api/chat", async (req, res) => {
     // Convert response to speech
     const audioStream = await elevenlabs.textToSpeech.convert(voice.id, {
       text: response,
-      modelId: "eleven_flash_v2",
+      modelId: "eleven_multilingual_v2",
     });
 
     const chunks = [];
