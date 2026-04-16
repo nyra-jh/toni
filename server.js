@@ -544,11 +544,12 @@ const FAQ_ENTRIES = [
     a_en: "Hmm, that's stubborn! Do you see an error message or does the screen just freeze?",
     followUps: ["Fehlermeldung gesehen", "Bildschirm friert ein", "App schließt sich einfach", "Kein bestimmtes Muster"],
     followUps_en: ["Saw error message", "Screen freezes", "App just closes", "No clear pattern"] },
-  { q: "problem melden bug report fehler melden ticket report problem",
-    a: "Klar, ich helfe! Was hast du gemacht, als das Problem auftrat, und was genau ist passiert?",
-    a_en: "Sure, I'll help! What were you doing when it happened, and what exactly did you see?",
+  { q: "problem melden bug report fehler melden ticket report problem ticket erstellen create ticket",
+    a: "Klar, ich erstelle ein Ticket! Beschreib kurz: Was hast du gemacht und was ist passiert?",
+    a_en: "Sure, I'll create a ticket! Briefly describe: what were you doing and what happened?",
     followUps: ["Bei einer Übung", "Beim Einloggen", "Im Dashboard", "Woanders"],
-    followUps_en: ["During an exercise", "When logging in", "On the dashboard", "Somewhere else"] },
+    followUps_en: ["During an exercise", "When logging in", "On the dashboard", "Somewhere else"],
+    createTicket: true },
   { q: "fehlermeldung error fehler angezeigt saw error message",
     a: "Was stand in der Fehlermeldung? Auch nur ein Teil hilft. Passiert es jedes Mal oder nur manchmal?",
     a_en: "What did the error say? Even part of it helps. Does it happen every time or only sometimes?",
@@ -784,10 +785,11 @@ function generateToniResponse(message, lang = 'de', entrypoint = null) {
   // Try FAQ match first
   const faqMatch = findBestFaqMatch(message);
   if (faqMatch) {
-    // Only allow ticket creation after at least 3 exchanges (user messages in history)
-    // This prevents creating a ticket on the very first message
-    const userMessageCount = chatHistory.filter(m => m.role === 'user').length;
-    const allowTicket = faqMatch.createTicket && userMessageCount >= 6;
+    // Allow ticket creation when:
+    // 1. User explicitly asks to report/create ticket (bypass message count), OR
+    // 2. FAQ entry has createTicket AND user has had enough exchanges (>=6)
+    const explicitReport = /problem melden|report problem|ticket|bug report|fehler melden/i.test(message);
+    const allowTicket = faqMatch.createTicket && (explicitReport || userMessageCount >= 6);
 
     return {
       text: isEn ? (faqMatch.a_en || faqMatch.a) : faqMatch.a,
