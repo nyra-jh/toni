@@ -806,18 +806,35 @@
       return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    function addMessage(text, role, audioBase64) {
+    function addMessage(text, role, audioBase64, options = {}) {
       const row = document.createElement('div');
       row.className = `msg-row ${role}`;
 
       const bubble = document.createElement('div');
       bubble.className = 'msg-bubble';
-      bubble.textContent = text;
-      row.appendChild(bubble);
 
-      messagesArea.appendChild(row);
+      if (options.typewriter && role === 'toni') {
+        bubble.textContent = '';
+        row.appendChild(bubble);
+        messagesArea.appendChild(row);
+        typewriterEffect(bubble, text, options.typewriterSpeed || 25, () => {
+          // Add meta after typing finishes
+          addMeta(row, role, audioBase64);
+          messagesArea.scrollTop = messagesArea.scrollHeight;
+          if (options.onComplete) options.onComplete();
+        });
+      } else {
+        bubble.textContent = text;
+        row.appendChild(bubble);
+        messagesArea.appendChild(row);
+        addMeta(row, role, audioBase64);
+      }
 
-      // Add meta row (time + optional play button) for toni messages
+      messagesArea.scrollTop = messagesArea.scrollHeight;
+      return row;
+    }
+
+    function addMeta(row, role, audioBase64) {
       if (role === 'toni') {
         const meta = document.createElement('div');
         meta.className = 'msg-meta';
@@ -839,7 +856,6 @@
         time.className = 'msg-time';
         time.textContent = getTimeString();
         meta.appendChild(time);
-
         row.appendChild(meta);
       } else {
         const meta = document.createElement('div');
@@ -851,9 +867,22 @@
         meta.appendChild(time);
         row.appendChild(meta);
       }
+    }
 
-      messagesArea.scrollTop = messagesArea.scrollHeight;
-      return row;
+    // Typewriter effect — reveals text character by character
+    function typewriterEffect(element, text, speed, onComplete) {
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          messagesArea.scrollTop = messagesArea.scrollHeight;
+          setTimeout(type, speed);
+        } else {
+          if (onComplete) onComplete();
+        }
+      }
+      type();
     }
 
     function showTypingIndicator() {
@@ -1026,7 +1055,7 @@
       if (!window.webkit?.messageHandlers?.toni) {
         messagesArea.innerHTML = '';
         quickReplies.style.display = '';
-        addMessage('Hi there! I\'m here to help you report any issues you\'re experiencing. What seems to be not working in the app?', 'toni');
+        addMessage('Hi there! I\'m here to help you report any issues you\'re experiencing. What seems to be not working in the app?', 'toni', null, { typewriter: true, typewriterSpeed: 20 });
       }
     }
 
@@ -1068,20 +1097,23 @@
         const data = await res.json();
 
         removeTypingIndicator();
-        addMessage(data.response, 'toni', data.audio || null);
-
-        // Show follow-up chips, or close button if conversation ended
-        if (data.followUps) {
-          showFollowUpChips(data.followUps);
-        }
-
-        // If user sent via voice, auto-play the response
-        if (inputMode === 'voice' && data.audio) {
-          const lastPlayBtn = messagesArea.querySelector('.msg-row.toni:last-child .play-audio-btn');
-          if (lastPlayBtn) {
-            setTimeout(() => togglePlayAudio(lastPlayBtn), 200);
+        addMessage(data.response, 'toni', data.audio || null, {
+          typewriter: true,
+          typewriterSpeed: 18,
+          onComplete: () => {
+            // Show follow-up chips after typing finishes
+            if (data.followUps) {
+              showFollowUpChips(data.followUps);
+            }
+            // If user sent via voice, auto-play the response
+            if (inputMode === 'voice' && data.audio) {
+              const lastPlayBtn = messagesArea.querySelector('.msg-row.toni:last-child .play-audio-btn');
+              if (lastPlayBtn) {
+                setTimeout(() => togglePlayAudio(lastPlayBtn), 200);
+              }
+            }
           }
-        }
+        });
       } catch (err) {
         removeTypingIndicator();
         addMessage('Oops, da ist etwas schiefgelaufen. Bitte versuche es nochmal!', 'toni');
@@ -1193,7 +1225,7 @@
           break;
         case 'agent_response':
           const agentText = msg.agent_response_event?.agent_response || '';
-          if (agentText) addMessage(agentText, 'toni');
+          if (agentText) addMessage(agentText, 'toni', null, { typewriter: true, typewriterSpeed: 18 });
           break;
         case 'user_transcript':
           const userText = msg.user_transcription_event?.user_transcript || '';
@@ -1481,8 +1513,8 @@
     setExpression('happy');
     scheduleBlink();
 
-    // Welcome message from Toni
-    addMessage('Hi there! I\'m here to help you report any issues you\'re experiencing. What seems to be not working in the app?', 'toni');
+    // Welcome message from Toni (with typing animation)
+    addMessage('Hi there! I\'m here to help you report any issues you\'re experiencing. What seems to be not working in the app?', 'toni', null, { typewriter: true, typewriterSpeed: 20 });
   </script>
 </body>
 </html>
