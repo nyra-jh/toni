@@ -244,8 +244,14 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Serve static files
-app.use(express.static(__dirname));
+// Serve static files (no cache for HTML to ensure fresh deploys)
+app.use(express.static(__dirname, {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
