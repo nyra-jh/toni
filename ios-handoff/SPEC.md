@@ -232,7 +232,62 @@ The SDK handles WebSocket, audio capture, and playback. You'd hook into its call
 
 ---
 
-## 9. File Inventory
+## 9. App Context Injection (WebView)
+
+When loading Toni in a WKWebView, inject the app context at document start:
+
+```swift
+let context = """
+  window.setAppContext({
+    platform: "iOS",
+    device: "\(deviceString)",
+    app: "\(appVersion)",
+    environment: "\(environment)",
+    userId: "\(userId)",
+    userType: "\(userType)",
+    organization: "\(orgId)",
+    locale: "\(locale)",
+    language: "\(language)",
+    entrypoint: "\(entrypoint)"
+  });
+"""
+
+let script = WKUserScript(
+    source: context,
+    injectionTime: .atDocumentEnd,
+    forMainFrameOnly: true
+)
+webView.configuration.userContentController.addUserScript(script)
+```
+
+### What Toni does with context
+- **language** — passed to the backend to create agents in the correct language (e.g. `de` for German)
+- **entrypoint** — logged, can be used to customize Toni's behavior per exercise type
+- **userId / organization** — available for analytics or personalization
+
+### Receiving messages from Toni
+Register a message handler to get callbacks:
+
+```swift
+webView.configuration.userContentController.add(self, name: "toni")
+
+func userContentController(_ controller: WKUserContentController,
+                          didReceive message: WKScriptMessage) {
+    guard let body = message.body as? [String: Any],
+          let type = body["type"] as? String else { return }
+
+    switch type {
+    case "ready":
+        print("Toni is loaded and ready")
+    default:
+        break
+    }
+}
+```
+
+---
+
+## 10. File Inventory
 
 ```
 ios-handoff/

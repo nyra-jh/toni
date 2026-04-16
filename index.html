@@ -456,6 +456,32 @@
     const chatArea = document.getElementById('chat-area');
     const voiceSelect = document.getElementById('voice-select');
 
+    // =============================================
+    // APP CONTEXT (received from native WebView host)
+    // =============================================
+    // The host app injects this before document load or calls window.setAppContext()
+    window.appContext = window.appContext || {};
+
+    window.setAppContext = function(ctx) {
+      window.appContext = ctx;
+      console.log('App context received:', ctx);
+
+      // Apply language — switch Toni's agent language if German
+      if (ctx.language && ctx.language !== 'en') {
+        window.appContext._lang = ctx.language;
+      }
+
+      // Apply entrypoint — could customize Toni's behavior per exercise
+      if (ctx.entrypoint) {
+        console.log('Entrypoint:', ctx.entrypoint);
+      }
+
+      // Notify the host that Toni is ready
+      if (window.webkit?.messageHandlers?.toni) {
+        window.webkit.messageHandlers.toni.postMessage({ type: 'ready' });
+      }
+    };
+
     // Load voices into selector
     fetch('/api/voices').then(r => r.json()).then(voices => {
       voices.forEach(v => {
@@ -706,7 +732,8 @@
       try {
         // Get signed URL from our backend
         const voiceKey = voiceSelect.value || 'bella';
-        const res = await fetch(`/api/conversation-url?voice=${voiceKey}`);
+        const lang = window.appContext._lang || 'en';
+        const res = await fetch(`/api/conversation-url?voice=${voiceKey}&lang=${lang}`);
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         const { signedUrl } = await res.json();
 
