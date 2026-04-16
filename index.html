@@ -381,6 +381,7 @@
       border-top: 1px solid var(--border-neutral-light);
       background: var(--surface-container);
       flex-shrink: 0;
+      overflow: hidden;
     }
     .input-field {
       flex: 1;
@@ -435,12 +436,14 @@
       align-items: center;
       gap: var(--space-s);
       flex: 1;
+      min-width: 0;
       height: 40px;
       padding: 0 var(--space-l);
       border-radius: var(--cr-30);
       background: var(--surface-container-low);
       border: 1.5px solid var(--primary-300);
       box-shadow: 0 0 0 3px rgba(57, 73, 245, 0.1);
+      overflow: hidden;
     }
     .recording-cancel-btn {
       width: 28px;
@@ -467,6 +470,7 @@
     }
     .waveform-container {
       flex: 1;
+      min-width: 0;
       display: flex;
       align-items: center;
       gap: var(--space-s);
@@ -1507,86 +1511,75 @@
       container.style.justifyContent = 'flex-end';
     }
 
-    // Mic button: dual interaction
+    // Mic button: dual interaction (press-and-hold + tap-to-toggle)
     function setupMicButton() {
       const btn = document.getElementById('mic-btn');
       btn.removeAttribute('onclick');
 
-      let pressTimer = null;
-      let isHoldMode = false;
-      let touchUsed = false;
-      let pendingRecording = false; // true while startRecording() is running
+      let holdMode = false;
+      let holdReleased = false; // set true if user releases before recording starts
 
-      function startPress(e) {
-        if (isBusy || isStopping || pendingRecording) return;
+      // Simple approach: pointerdown/pointerup for unified touch+mouse
+      btn.addEventListener('pointerdown', async (e) => {
         e.preventDefault();
+        btn.setPointerCapture(e.pointerId);
 
+        if (isBusy || isStopping) return;
+
+        // If already recording (tap-to-toggle), stop
         if (isRecording) {
-          // Already recording (tap-to-toggle mode) → stop and send
           stopRecordingAndSend();
           micTapMode = false;
           return;
         }
 
         micPressStart = Date.now();
-        isHoldMode = false;
+        holdMode = false;
+        holdReleased = false;
 
-        pressTimer = setTimeout(async () => {
-          // Long press confirmed → start recording in hold mode
-          isHoldMode = true;
-          micTapMode = false;
-          pendingRecording = true;
-          await startRecording();
-          pendingRecording = false;
-          // Check if user already released while we were awaiting
-          if (!isHoldMode && isRecording) {
-            stopRecordingAndSend();
-          }
-        }, 300);
-      }
+        // Wait a beat to distinguish tap from hold
+        await new Promise(r => setTimeout(r, 250));
 
-      function endPress(e) {
+        // If already released, this was a tap
+        if (holdReleased) return;
+
+        // Still holding — start recording in hold mode
+        holdMode = true;
+        micTapMode = false;
+        await startRecording();
+
+        // If user released while we awaited mic permission, stop now
+        if (holdReleased && isRecording) {
+          stopRecordingAndSend();
+        }
+      });
+
+      btn.addEventListener('pointerup', (e) => {
         e.preventDefault();
-        clearTimeout(pressTimer);
-
+        holdReleased = true;
         const pressDuration = Date.now() - micPressStart;
 
-        if (isHoldMode) {
-          // Was holding → release sends
-          if (isRecording) {
-            stopRecordingAndSend();
-          }
-          // If still pending (awaiting mic permission), mark hold as done
-          // so the pending callback will stop after starting
-          isHoldMode = false;
-        } else if (pressDuration < 300 && !isRecording && !pendingRecording) {
-          // Short tap → start recording in tap-to-toggle mode
+        if (holdMode && isRecording) {
+          // Release after hold → send
+          stopRecordingAndSend();
+          holdMode = false;
+        } else if (!holdMode && pressDuration < 250 && !isRecording) {
+          // Quick tap → start in tap-to-toggle mode
           micTapMode = true;
           startRecording();
         }
-      }
+      });
 
-      function cancelPress(e) {
-        clearTimeout(pressTimer);
-        if (isHoldMode && isRecording) {
+      btn.addEventListener('pointercancel', () => {
+        holdReleased = true;
+        if (holdMode && isRecording) {
           stopRecordingAndSend();
         }
-        isHoldMode = false;
-      }
+        holdMode = false;
+      });
 
-      // Touch events (mobile)
-      btn.addEventListener('touchstart', (e) => { touchUsed = true; startPress(e); }, { passive: false });
-      btn.addEventListener('touchend', (e) => { endPress(e); }, { passive: false });
-      btn.addEventListener('touchcancel', (e) => { cancelPress(e); });
-
-      // Mouse events (desktop) -- skip if touch was used
-      btn.addEventListener('mousedown', (e) => { if (!touchUsed) startPress(e); });
-      btn.addEventListener('mouseup', (e) => { if (!touchUsed) endPress(e); });
-      btn.addEventListener('mouseleave', (e) => { if (!touchUsed) cancelPress(e); });
-
-      // Prevent click from firing after touch
+      // Block click to prevent ghost events
       btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); });
-      document.addEventListener('mousedown', () => { touchUsed = false; }, true);
     }
 
     async function startRecording() {
