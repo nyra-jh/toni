@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Toni Lottie Preview</title>
+  <style>
+    body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #F4F5FF; }
+    #toni { width: 400px; height: 400px; }
+  </style>
+</head>
+<body>
+  <div id="toni"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  <script>
+    lottie.loadAnimation({
+      container: document.getElementById('toni'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: '/toni-lottie.json?v=' + Date.now()
+    });
+  </script>
+</body>
+</html>
