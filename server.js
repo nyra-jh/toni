@@ -778,7 +778,10 @@ function generateToniResponse(message, lang = 'de', entrypoint = null) {
   };
 
   // Check if this matches a trending (frequently reported) issue
-  const trending = findTrendingMatch(message, entrypoint);
+  // Only show trending notice on the first 1-2 messages — after that, use normal flow
+  // to keep the conversation progressing instead of repeating the trending notice
+  const userMessageCount = chatHistory.filter(m => m.role === 'user').length;
+  const trending = userMessageCount <= 2 ? findTrendingMatch(message, entrypoint) : null;
   if (trending) {
     const categoryNames = {
       crash: { de: 'App-Abstürze', en: 'app crashes' },
@@ -863,7 +866,6 @@ function generateToniResponse(message, lang = 'de', entrypoint = null) {
 
   // H.E.A.R.T. context-aware fallback — detect topic and ask empathetic follow-ups
   const lastAssistantMsg = [...chatHistory].reverse().find(m => m.role === 'assistant')?.content || '';
-  const userMessageCount = chatHistory.filter(m => m.role === 'user').length;
   const allUserMsgs = chatHistory.filter(m => m.role === 'user').map(m => m.content.toLowerCase()).join(' ');
 
   // After enough exchanges with no resolution — Thank + escalate (need at least 7 messages)
