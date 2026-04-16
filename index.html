@@ -424,8 +424,8 @@
       box-shadow: none;
     }
     .mic-btn.recording {
-      background: var(--primary-700);
-      box-shadow: none;
+      background: var(--primary-500);
+      box-shadow: 0px 2px 0px 0px var(--elevation-standard);
     }
     .mic-btn.recording svg { fill: white; }
 
@@ -490,13 +490,26 @@
       align-items: center;
       gap: 2px;
       height: 28px;
+      overflow: hidden;
+      flex-wrap: nowrap;
     }
     .waveform-bars .bar {
       width: 3px;
       min-height: 3px;
+      max-height: 28px;
       border-radius: 2px;
       background: var(--primary-400);
-      transition: height 0.05s ease;
+      flex-shrink: 0;
+    }
+    .listening-dots .dots::after {
+      content: '';
+      animation: listeningDots 1.5s steps(4, end) infinite;
+    }
+    @keyframes listeningDots {
+      0% { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
     }
     .recording-timer {
       font-size: var(--label-medium);
@@ -1012,10 +1025,16 @@
       if (options.typewriter && role === 'toni') {
         bubble.textContent = '';
         row.appendChild(bubble);
+        // If immediateAudio, add meta right away so audio can start playing during typewriter
+        if (options.immediateAudio) {
+          addMeta(row, role, audioBase64);
+        }
         messagesArea.appendChild(row);
         typewriterEffect(bubble, text, options.typewriterSpeed || 25, () => {
-          // Add meta after typing finishes
-          addMeta(row, role, audioBase64);
+          // Add meta after typing finishes (only if not already added)
+          if (!options.immediateAudio) {
+            addMeta(row, role, audioBase64);
+          }
           messagesArea.scrollTop = messagesArea.scrollHeight;
           if (options.onComplete) options.onComplete();
         });
@@ -1388,9 +1407,11 @@
         // Track Toni's response
         conversationLog.push({ role: 'toni', text: data.response });
 
-        addMessage(data.response, 'toni', data.audio || null, {
+        const msgRow = addMessage(data.response, 'toni', data.audio || null, {
           typewriter: true,
           typewriterSpeed: 18,
+          // When toniSpeaksMode is on, add meta immediately (not after typewriter)
+          immediateAudio: toniSpeaksMode,
           onComplete: () => {
             // Auto-create Linear ticket when the server signals it (only once)
             if (data.createTicket && !ticketAlreadyCreated) {
@@ -1406,19 +1427,19 @@
             if (data.followUps !== null && data.followUps !== undefined) {
               showFollowUpChips(data.followUps);
             }
-            // If toni speaks mode is on, auto-play the response
-            if (toniSpeaksMode && data.audio) {
-              // Find the last Toni message's play button (not necessarily last-child due to follow-up chips)
-              const toniRows = messagesArea.querySelectorAll('.msg-row.toni');
-              const lastToniRow = toniRows[toniRows.length - 1];
-              const lastPlayBtn = lastToniRow?.querySelector('.play-audio-btn');
-              console.log('[Voice] Auto-play:', !!lastPlayBtn, 'toniSpeaksMode:', toniSpeaksMode);
-              if (lastPlayBtn) {
-                setTimeout(() => togglePlayAudio(lastPlayBtn), 200);
-              }
-            }
+            // If NOT in toni speaks mode (text-only), the play button was already added by onComplete
+            // If in toni speaks mode, audio was already started below
           }
         });
+
+        // If toni speaks mode, start audio immediately (parallel with typewriter)
+        if (toniSpeaksMode && data.audio) {
+          setTimeout(() => {
+            const playBtn = msgRow?.querySelector('.play-audio-btn');
+            console.log('[Voice] Auto-play simultaneous:', !!playBtn);
+            if (playBtn) togglePlayAudio(playBtn);
+          }, 100);
+        }
       } catch (err) {
         removeTypingIndicator();
         addMessage('Oops, da ist etwas schiefgelaufen. Bitte versuche es nochmal!', 'toni');
@@ -1482,13 +1503,8 @@
     function initWaveformBars() {
       const container = document.getElementById('waveform-bars');
       container.innerHTML = '';
-      const barCount = 35;
-      for (let i = 0; i < barCount; i++) {
-        const bar = document.createElement('div');
-        bar.className = 'bar';
-        bar.style.height = '3px';
-        container.appendChild(bar);
-      }
+      // Scrolling waveform — bars are added dynamically during recording
+      container.style.justifyContent = 'flex-end';
     }
 
     // Mic button: dual interaction
@@ -1497,28 +1513,35 @@
       btn.removeAttribute('onclick');
 
       let pressTimer = null;
-      let isLongPress = false;
+      let isHoldMode = false;
       let touchUsed = false;
+      let pendingRecording = false; // true while startRecording() is running
 
       function startPress(e) {
-        if (isBusy || isStopping) return;
+        if (isBusy || isStopping || pendingRecording) return;
         e.preventDefault();
 
         if (isRecording) {
-          // Already recording (tap-to-toggle mode) -> stop and send
+          // Already recording (tap-to-toggle mode) → stop and send
           stopRecordingAndSend();
           micTapMode = false;
           return;
         }
 
         micPressStart = Date.now();
-        isLongPress = false;
+        isHoldMode = false;
 
-        pressTimer = setTimeout(() => {
-          // Long press confirmed -> start recording in hold mode
-          isLongPress = true;
+        pressTimer = setTimeout(async () => {
+          // Long press confirmed → start recording in hold mode
+          isHoldMode = true;
           micTapMode = false;
-          startRecording();
+          pendingRecording = true;
+          await startRecording();
+          pendingRecording = false;
+          // Check if user already released while we were awaiting
+          if (!isHoldMode && isRecording) {
+            stopRecordingAndSend();
+          }
         }, 300);
       }
 
@@ -1528,24 +1551,27 @@
 
         const pressDuration = Date.now() - micPressStart;
 
-        if (isLongPress && isRecording) {
-          // Was holding -> release sends
-          stopRecordingAndSend();
-        } else if (pressDuration < 300 && !isRecording) {
-          // Short tap -> start recording in tap-to-toggle mode
+        if (isHoldMode) {
+          // Was holding → release sends
+          if (isRecording) {
+            stopRecordingAndSend();
+          }
+          // If still pending (awaiting mic permission), mark hold as done
+          // so the pending callback will stop after starting
+          isHoldMode = false;
+        } else if (pressDuration < 300 && !isRecording && !pendingRecording) {
+          // Short tap → start recording in tap-to-toggle mode
           micTapMode = true;
           startRecording();
         }
-
-        isLongPress = false;
       }
 
       function cancelPress(e) {
         clearTimeout(pressTimer);
-        if (isLongPress && isRecording) {
+        if (isHoldMode && isRecording) {
           stopRecordingAndSend();
         }
-        isLongPress = false;
+        isHoldMode = false;
       }
 
       // Touch events (mobile)
@@ -1558,7 +1584,7 @@
       btn.addEventListener('mouseup', (e) => { if (!touchUsed) endPress(e); });
       btn.addEventListener('mouseleave', (e) => { if (!touchUsed) cancelPress(e); });
 
-      // Reset touch flag
+      // Prevent click from firing after touch
       btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); });
       document.addEventListener('mousedown', () => { touchUsed = false; }, true);
     }
@@ -1614,7 +1640,7 @@
       liveBubble.className = 'msg-bubble';
       liveBubble.style.opacity = '0.6';
       liveBubble.style.fontStyle = 'italic';
-      liveBubble.textContent = appLang === 'de' ? 'Ich höre zu...' : 'Listening...';
+      liveBubble.innerHTML = `<span class="listening-dots">${appLang === 'de' ? 'Ich höre zu' : 'Listening'}<span class="dots"></span></span>`;
       liveRow.appendChild(liveBubble);
       messagesArea.appendChild(liveRow);
       messagesArea.scrollTop = messagesArea.scrollHeight;
@@ -1649,23 +1675,39 @@
     function animateWaveform() {
       if (!isRecording || !recordingAnalyser) return;
 
-      const bars = document.querySelectorAll('#waveform-bars .bar');
+      const container = document.getElementById('waveform-bars');
       const dataArray = new Uint8Array(recordingAnalyser.frequencyBinCount);
+      let lastBarTime = 0;
+      const BAR_INTERVAL = 80; // ms between new bars
 
-      function update() {
+      function update(timestamp) {
         if (!isRecording) return;
+
         recordingAnalyser.getByteFrequencyData(dataArray);
 
-        const step = Math.floor(dataArray.length / bars.length);
-        bars.forEach((bar, i) => {
-          const val = dataArray[i * step] || 0;
-          const height = Math.max(3, (val / 255) * 28);
+        // Add a new bar every BAR_INTERVAL ms
+        if (timestamp - lastBarTime > BAR_INTERVAL) {
+          // Average a few frequency bins for the bar height
+          let sum = 0;
+          const bins = Math.min(20, dataArray.length);
+          for (let i = 0; i < bins; i++) sum += dataArray[i];
+          const avg = sum / bins;
+          const height = Math.max(3, (avg / 255) * 28);
+
+          const bar = document.createElement('div');
+          bar.className = 'bar';
           bar.style.height = height + 'px';
-        });
+          container.appendChild(bar);
+
+          // Auto-scroll to show latest bars
+          container.scrollLeft = container.scrollWidth;
+
+          lastBarTime = timestamp;
+        }
 
         recordingAnimFrame = requestAnimationFrame(update);
       }
-      update();
+      requestAnimationFrame(update);
     }
 
     function updateRecordingTimer() {

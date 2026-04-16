@@ -883,7 +883,9 @@ app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
       languageCode: lang === 'de' ? 'deu' : 'eng',
     });
 
-    res.json({ text: result.text || '' });
+    // Normalize "Tony" → "Toni" (common STT misinterpretation)
+    const text = (result.text || '').replace(/\bTony\b/gi, 'Toni');
+    res.json({ text });
   } catch (err) {
     console.error('Transcription error:', err.message);
     res.status(500).json({ error: 'Transcription failed' });
@@ -924,6 +926,8 @@ app.post("/api/chat", async (req, res) => {
     if (chatHistory.length > 20) chatHistory.splice(0, 2);
 
     const result = generateToniResponse(message, lang);
+    // Ensure "Toni" is always spelled correctly (never "Tony")
+    result.text = result.text.replace(/\bTony\b/gi, 'Toni');
     chatHistory.push({ role: "assistant", content: result.text });
 
     // Convert response to speech
