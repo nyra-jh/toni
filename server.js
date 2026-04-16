@@ -260,7 +260,7 @@ const FAQ_ENTRIES = [
     a_en: "Sure! Uninstall and reinstall — your data stays safe, linked to your account.",
     followUps: ["Daten wirklich sicher?", "Wie melde ich mich wieder an?", "Problem melden"],
     followUps_en: ["Is my data safe?", "How do I log back in?", "Report problem"] },
-  { q: "app funktioniert nicht geht nicht startet nicht",
+  { q: "app funktioniert nicht app startet nicht app geht nicht",
     a: "Oh, das ist blöd! Versuch mal die App komplett zu schließen, dann schau ob es ein Update gibt, und starte notfalls dein Gerät neu.",
     a_en: "Oh, that's no good! Try closing the app completely, then check for updates, and restart your device if needed.",
     followUps: ["Hat funktioniert!", "Problem besteht weiter", "App neu installieren"],
@@ -312,9 +312,9 @@ const FAQ_ENTRIES = [
     a_en: "What's happening exactly? Won't start, freezes, or not recognizing input?",
     followUps: ["Startet nicht", "Bleibt hängen", "Eingabe wird nicht erkannt", "Anderes Problem"],
     followUps_en: ["Won't start", "Freezes", "Input not recognized", "Other problem"] },
-  { q: "übung starten geht nicht startet nicht exercise wont start",
-    a: "Probier mal: Geh zurück zum Dashboard und wähl sie erneut. Prüf auch dein Internet.",
-    a_en: "Try this: go back to the dashboard and reselect it. Also check your internet.",
+  { q: "übung starten startet nicht öffnet nicht exercise wont start wont open",
+    a: "Hmm, versuch mal zurück zum Dashboard zu gehen und die Übung nochmal auszuwählen. Ist dein Internet stabil?",
+    a_en: "Hmm, try going back to the dashboard and selecting the exercise again. Is your internet connection stable?",
     followUps: ["Übung neu starten", "Andere Übung wählen", "Alle Übungen betroffen"],
     followUps_en: ["Restart exercise", "Choose different exercise", "All exercises affected"] },
   { q: "eingabe erkannt reagiert nicht tippt nichts passiert input recognized touch",
@@ -337,7 +337,7 @@ const FAQ_ENTRIES = [
     a_en: "Hmm, sounds like a loading issue. Is your internet stable? Try closing the app completely and restarting it.",
     followUps: ["App neu starten", "Internet prüfen", "Problem melden"],
     followUps_en: ["Restart app", "Check internet", "Report problem"] },
-  { q: "übung verstehe ich nicht anleitung schwer schwierig wie geht die übung",
+  { q: "übung verstehe nicht anleitung schwer schwierig erklärung erklären anleitung zeigen",
     a: "Tipp in der Übung links unten auf 'Hilfe und Erklärung' — da findest du die Anleitung!",
     a_en: "Tap 'Help & Explanation' at the bottom left of the exercise — you'll find instructions there!",
     followUps: ["Andere Übung wählen", "Schwierigkeit anpassen", "Therapeut kontaktieren"],
@@ -1321,17 +1321,19 @@ const chatHistory = [];
 // Detect if a message is German or English based on common words
 function detectMessageLang(message, fallback = 'de') {
   const lower = message.toLowerCase();
-  const deWords = ['ich', 'die', 'der', 'das', 'und', 'ist', 'nicht', 'ein', 'eine', 'mir', 'mich', 'hab', 'habe', 'kann', 'geht', 'bei', 'mein', 'meine', 'auch', 'noch', 'app', 'wie', 'was', 'wann', 'warum', 'funktioniert', 'problem', 'hilfe', 'bitte', 'danke', 'übung', 'hallo', 'guten', 'morgen', 'tag'];
-  const enWords = ['the', 'is', 'are', 'was', 'have', 'has', 'not', 'my', 'can', 'how', 'what', 'when', 'why', 'with', 'this', 'that', 'help', 'please', 'thank', 'hello', 'problem', 'does', 'work', 'working'];
+  const deWords = ['ich', 'die', 'der', 'das', 'und', 'ist', 'nicht', 'ein', 'eine', 'mir', 'mich', 'hab', 'habe', 'kann', 'geht', 'bei', 'mein', 'meine', 'auch', 'noch', 'wie', 'was', 'wann', 'warum', 'funktioniert', 'hilfe', 'bitte', 'danke', 'übung', 'hallo', 'guten', 'morgen', 'tag', 'sie', 'aber', 'dann', 'schon', 'nein', 'ja', 'also', 'grad', 'irgendwie', 'einfach', 'diese', 'dieser', 'dieses', 'probiert', 'startet', 'reagiert', 'brauche', 'keine', 'kein', 'gesagt', 'macht', 'nochmal'];
+  const enWords = ['the', 'is', 'are', 'was', 'have', 'has', 'not', 'my', 'can', 'how', 'what', 'when', 'why', 'with', 'this', 'that', 'help', 'please', 'thank', 'hello', 'does', 'work', 'working', 'just', 'but', 'still', 'tried', 'trying'];
 
-  const words = lower.split(/\s+/);
+  // Check current message + recent chat history for better detection
+  const allText = [lower, ...chatHistory.filter(m => m.role === 'user').slice(-3).map(m => m.content.toLowerCase())].join(' ');
+  const words = allText.split(/\s+/);
   let deScore = 0, enScore = 0;
   for (const w of words) {
     if (deWords.includes(w)) deScore++;
     if (enWords.includes(w)) enScore++;
   }
-  // Also check for German-specific characters
-  if (/[äöüß]/.test(lower)) deScore += 2;
+  // German-specific characters are a strong signal
+  if (/[äöüß]/.test(allText)) deScore += 3;
 
   if (deScore > enScore) return 'de';
   if (enScore > deScore) return 'en';
