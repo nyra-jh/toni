@@ -246,13 +246,13 @@ const AGENT_ID = "agent_4601kpanrrfyf8avkgzm4qj0xkmf";
 const FAQ_ENTRIES = [
   // ── TROUBLESHOOTING: App Issues ──
   { q: "app abstürzt absturz crash crashes freezes einfriert",
-    a: "App stürzt ab — ärgerlich, sorry! Schließe sie komplett und öffne neu. Hilft das nicht, prüf auf Updates.",
-    a_en: "App crashing — sorry about that! Close it completely and reopen. If that doesn't help, check for updates.",
+    a: "Uff, das nervt! Schließ die App komplett und öffne sie neu. Hilft das nicht, prüf auf Updates.",
+    a_en: "Ugh, that's annoying! Close the app completely and reopen. If that doesn't help, check for updates.",
     followUps: ["App neu installieren", "Immer noch Probleme", "Problem melden"],
     followUps_en: ["Reinstall app", "Still having problems", "Report problem"] },
   { q: "app langsam slow laden lange dauert",
-    a: "Langsame App — nervt, sorry! Schließe sie komplett und starte neu. Prüf auch dein WLAN.",
-    a_en: "Slow app — sorry! Close it completely and restart. Also check your WiFi connection.",
+    a: "Hmm, probier mal: App komplett schließen und neu starten. Prüf auch dein WLAN.",
+    a_en: "Hmm, try this: close the app completely and restart. Also check your WiFi connection.",
     followUps: ["App neu starten hat geholfen", "Immer noch langsam", "Übungen laden nicht"],
     followUps_en: ["Restarting helped", "Still slow", "Exercises won't load"] },
   { q: "app neu installieren neuinstallation reinstall",
@@ -261,8 +261,8 @@ const FAQ_ENTRIES = [
     followUps: ["Daten wirklich sicher?", "Wie melde ich mich wieder an?", "Problem melden"],
     followUps_en: ["Is my data safe?", "How do I log back in?", "Report problem"] },
   { q: "app funktioniert nicht geht nicht startet nicht",
-    a: "Ärgerlich, sorry! Probier: App komplett schließen, auf Updates prüfen, Gerät neu starten.",
-    a_en: "Sorry about that! Try: close the app completely, check for updates, restart your device.",
+    a: "Probier mal: App komplett schließen, auf Updates prüfen, Gerät neu starten.",
+    a_en: "Try this: close the app completely, check for updates, restart your device.",
     followUps: ["Hat funktioniert!", "Problem besteht weiter", "App neu installieren"],
     followUps_en: ["That worked!", "Problem continues", "Reinstall app"] },
   { q: "update aktualisieren neue version",
@@ -271,35 +271,35 @@ const FAQ_ENTRIES = [
     followUps: ["Kein Update verfügbar", "Nach Update geht nichts mehr", "Problem melden"],
     followUps_en: ["No update available", "Nothing works after update", "Report problem"] },
   { q: "bildschirm schwarz weiß display anzeige kaputt ui",
-    a: "Anzeigefehler — verwirrend, sorry! Schließe die App komplett und öffne neu. Bleibt es, prüf auf Updates.",
-    a_en: "Display issue — sorry! Close the app completely and reopen. If it persists, check for updates.",
+    a: "Verstehe! Schließ die App komplett und öffne sie neu. Bleibt es, prüf auf Updates.",
+    a_en: "Got it! Close the app completely and reopen. If it persists, check for updates.",
     followUps: ["App neu starten", "App aktualisieren", "Problem melden"],
     followUps_en: ["Restart app", "Update app", "Report problem"] },
 
   // ── TROUBLESHOOTING: Exercises ──
   { q: "übung funktioniert nicht geht nicht klappt nicht exercise doesnt work broken",
-    a: "Übung geht nicht — frustrierend, sorry! Hängt der Bildschirm, kommt ein Fehler, oder reagiert nichts?",
-    a_en: "Exercise not working — sorry! Does the screen freeze, show an error, or not respond at all?",
+    a: "Hängt der Bildschirm, kommt ein Fehler, oder reagiert gar nichts?",
+    a_en: "Does the screen freeze, show an error, or not respond at all?",
     followUps: ["Bildschirm hängt", "Keine Reaktion auf Eingabe", "Fehlermeldung", "Übung lädt nicht"],
     followUps_en: ["Screen freezes", "No response to input", "Error message", "Exercise won't load"] },
   { q: "froschübung frosch frog bestimmte übung spezielle eine übung specific exercise",
-    a: "Problem bei einer Übung — ärgerlich! Startet sie nicht, hängt sie, oder wird die Eingabe nicht erkannt?",
-    a_en: "Problem with a specific exercise — sorry! Won't start, freezes, or not recognizing input?",
+    a: "Ach, was passiert genau? Startet sie nicht, hängt sie, oder wird die Eingabe nicht erkannt?",
+    a_en: "What's happening exactly? Won't start, freezes, or not recognizing input?",
     followUps: ["Startet nicht", "Bleibt hängen", "Eingabe wird nicht erkannt", "Anderes Problem"],
     followUps_en: ["Won't start", "Freezes", "Input not recognized", "Other problem"] },
   { q: "übung starten geht nicht startet nicht exercise wont start",
-    a: "Startet nicht — sorry! Geh zurück zum Dashboard, wähl sie erneut. Prüf dein Internet und starte die App neu.",
-    a_en: "Won't start — sorry! Go back to the dashboard and reselect it. Check your internet and restart the app.",
+    a: "Probier mal: Geh zurück zum Dashboard und wähl sie erneut. Prüf auch dein Internet.",
+    a_en: "Try this: go back to the dashboard and reselect it. Also check your internet.",
     followUps: ["Übung neu starten", "Andere Übung wählen", "Alle Übungen betroffen"],
     followUps_en: ["Restart exercise", "Choose different exercise", "All exercises affected"] },
   { q: "eingabe erkannt reagiert nicht tippt nichts passiert input recognized touch",
-    a: "Keine Reaktion — frustrierend, sorry! Schließe die App komplett und starte neu. Probier auch andere Übungen.",
-    a_en: "No response — sorry! Close the app completely and restart. Try other exercises to narrow it down.",
+    a: "Hmm, schließ die App komplett und starte neu. Probier auch andere Übungen zum Vergleich.",
+    a_en: "Hmm, close the app completely and restart. Try other exercises to narrow it down.",
     followUps: ["Nur bei dieser Übung", "Bei allen Übungen", "App neu gestartet, geht trotzdem nicht"],
     followUps_en: ["Only this exercise", "All exercises", "Restarted app, still not working"] },
   { q: "übung hängt einfriert freeze stuck bildschirm hängt mittendrin",
-    a: "Friert ein — nervig, sorry! Schließe die App komplett über den App-Switcher. Bei einer Übung oder mehreren?",
-    a_en: "Freezing — sorry! Close the app completely via the app switcher. Happens with one exercise or several?",
+    a: "Schließ die App komplett über den App-Switcher. Passiert das bei einer Übung oder mehreren?",
+    a_en: "Close the app completely via the app switcher. Happens with one exercise or several?",
     followUps: ["Nur bei einer Übung", "Bei mehreren Übungen", "Nach App-Neustart auch noch"],
     followUps_en: ["Only one exercise", "Multiple exercises", "Still happens after restart"] },
   { q: "übung neu starten restart exercise neustarten",
@@ -308,8 +308,8 @@ const FAQ_ENTRIES = [
     followUps: ["Hat geklappt!", "Übung reagiert nicht", "Problem melden"],
     followUps_en: ["That worked!", "Exercise not responding", "Report problem"] },
   { q: "übungen laden nicht loading fehler exercises wont load",
-    a: "Laden nicht — sorry! Prüf dein Internet und starte die App komplett neu über den App-Switcher.",
-    a_en: "Won't load — sorry! Check your internet and restart the app completely via the app switcher.",
+    a: "Prüf mal dein Internet und starte die App komplett neu über den App-Switcher.",
+    a_en: "Check your internet and restart the app completely via the app switcher.",
     followUps: ["App neu starten", "Internet prüfen", "Problem melden"],
     followUps_en: ["Restart app", "Check internet", "Report problem"] },
   { q: "übung verstehe ich nicht anleitung schwer schwierig",
@@ -323,15 +323,15 @@ const FAQ_ENTRIES = [
     followUps: ["Einstellungen öffnen", "Therapeut kontaktieren", "Wie funktioniert der Therapieplan?"],
     followUps_en: ["Open settings", "Contact therapist", "How does the therapy plan work?"] },
   { q: "ton audio sound hören lautsprecher kein ton stumm leise",
-    a: "Kein Ton — nervt, sorry! Prüf ob dein Gerät auf stumm steht, Lautstärke hoch genug ist und Ton in der App an ist.",
-    a_en: "No sound — sorry! Check if your device is on silent, volume is up, and sound is enabled in the app.",
+    a: "Prüf mal: Ist dein Gerät auf stumm? Lautstärke hoch genug? Ton in der App aktiviert?",
+    a_en: "Quick check: is your device on silent? Volume up? Sound enabled in the app?",
     followUps: ["Ton funktioniert jetzt", "Immer noch kein Ton", "Problem melden"],
     followUps_en: ["Sound works now", "Still no sound", "Report problem"] },
 
   // ── TROUBLESHOOTING: Login & Account ──
   { q: "einloggen login nicht möglich anmelden geht nicht",
-    a: "Login geht nicht — ärgerlich, sorry! Prüf E-Mail und Passwort (Groß-/Kleinschreibung!). Sonst: 'Passwort vergessen?' nutzen.",
-    a_en: "Can't log in — sorry! Check email and password (case-sensitive!). Otherwise try 'Forgot password?'.",
+    a: "Prüf mal E-Mail und Passwort genau (Groß-/Kleinschreibung!). Sonst tipp auf 'Passwort vergessen?'.",
+    a_en: "Check your email and password carefully (case-sensitive!). Otherwise tap 'Forgot password?'.",
     followUps: ["Passwort zurücksetzen", "E-Mail-Adresse vergessen", "Problem melden"],
     followUps_en: ["Reset password", "Forgot email", "Report problem"] },
   { q: "passwort vergessen zurücksetzen reset password forgot",
@@ -355,8 +355,8 @@ const FAQ_ENTRIES = [
     followUps: ["Problem melden", "Ohne Code registrieren", "Was ist ein Zugangscode?"],
     followUps_en: ["Report problem", "Register without code", "What's an access code?"] },
   { q: "zugangscode nicht erhalten bekommen",
-    a: "Ärgerlich, sorry! Prüf deinen Spam-Ordner. Nichts da? Frag deine Klinik oder support@nyra.health.",
-    a_en: "Sorry! Check your spam folder. Nothing there? Ask your clinic or contact support@nyra.health.",
+    a: "Schau mal im Spam-Ordner nach. Nichts da? Frag deine Klinik oder schreib an support@nyra.health.",
+    a_en: "Check your spam folder first. Nothing there? Ask your clinic or contact support@nyra.health.",
     followUps: ["Spam-Ordner gecheckt", "Problem melden", "Neue E-Mail anfordern"],
     followUps_en: ["Checked spam", "Report problem", "Request new email"] },
 
@@ -384,8 +384,8 @@ const FAQ_ENTRIES = [
 
   // ── TROUBLESHOOTING: Data & Sync ──
   { q: "fortschritte nicht gespeichert verloren daten weg sync",
-    a: "Fortschritte weg — frustrierend, sorry! Prüf dein Internet und starte die App neu. Daten synchronisieren automatisch.",
-    a_en: "Progress gone — sorry! Check your internet and restart the app. Data syncs automatically when online.",
+    a: "Keine Sorge, Daten synchronisieren automatisch. Prüf dein Internet und starte die App neu.",
+    a_en: "Don't worry, data syncs automatically. Check your internet and restart the app.",
     followUps: ["Internet prüfen", "App neu starten", "Problem melden"],
     followUps_en: ["Check internet", "Restart app", "Report problem"] },
   { q: "offline nutzen ohne internet",
@@ -401,8 +401,8 @@ const FAQ_ENTRIES = [
 
   // ── TROUBLESHOOTING: Payment ──
   { q: "zahlung payment bezahlung fehlgeschlagen nicht geklappt",
-    a: "Zahlungsproblem — sorry! Prüf deine Zahlungsmethode: Geräte-Einstellungen > Apple-ID/Google-Konto > Zahlung.",
-    a_en: "Payment issue — sorry! Check your payment method: device Settings > Apple ID/Google Account > Payment.",
+    a: "Prüf mal deine Zahlungsmethode unter Geräte-Einstellungen > Apple-ID/Google-Konto > Zahlung.",
+    a_en: "Check your payment method in device Settings > Apple ID/Google Account > Payment.",
     followUps: ["Zahlungsmethode prüfen", "Andere Zahlungsmethode", "Problem melden"],
     followUps_en: ["Check payment method", "Different payment method", "Report problem"] },
   { q: "kosten kostenpflichtig preis was kostet",
@@ -540,8 +540,8 @@ const FAQ_ENTRIES = [
     followUps: ["Nein, alles gut!", "Andere Frage", "Übungen starten"],
     followUps_en: ["No, all good!", "Other question", "Start exercises"] },
   { q: "immer noch problem nicht geholfen besteht weiter geht immer noch nicht still having problems not working continues",
-    a: "Immer noch Probleme — frustrierend, sorry! Siehst du eine Fehlermeldung oder bleibt der Bildschirm stehen?",
-    a_en: "Still not working — sorry! Do you see an error message or does the screen just freeze?",
+    a: "Hmm, das ist hartnäckig! Siehst du eine Fehlermeldung oder bleibt der Bildschirm stehen?",
+    a_en: "Hmm, that's stubborn! Do you see an error message or does the screen just freeze?",
     followUps: ["Fehlermeldung gesehen", "Bildschirm friert ein", "App schließt sich einfach", "Kein bestimmtes Muster"],
     followUps_en: ["Saw error message", "Screen freezes", "App just closes", "No clear pattern"] },
   { q: "problem melden bug report fehler melden ticket report problem",
@@ -555,13 +555,13 @@ const FAQ_ENTRIES = [
     followUps: ["Ich weiß es nicht mehr", "Passiert jedes Mal", "Nur manchmal", "Nochmal versuchen"],
     followUps_en: ["I don't remember", "Happens every time", "Only sometimes", "Try again"] },
   { q: "bildschirm friert ein hängt stuck frozen reagiert nicht screen freezes",
-    a: "Nervig, sorry! Schließe die App komplett und öffne neu. Bleibt es: bei welcher Funktion, und seit wann?",
-    a_en: "Sorry! Close the app completely and reopen. If it persists: which feature, and since when?",
+    a: "Schließ die App komplett und öffne sie neu. Bleibt es: bei welcher Funktion, und seit wann?",
+    a_en: "Close the app completely and reopen. If it persists: which feature, and since when?",
     followUps: ["Bei einer Übung", "Im Dashboard", "Gleich nach dem Start", "Hat nach Neustart geklappt"],
     followUps_en: ["During an exercise", "In the dashboard", "Right after launch", "Fixed after restart"] },
   { q: "app schließt sich einfach von alleine beendet just closes itself",
-    a: "Ärgerlich, sorry! Prüf auf Updates im App Store. Passiert es bei bestimmter Aktion oder zufällig? Seit wann?",
-    a_en: "Sorry! Check for updates in the App Store. Happens during a specific action or randomly? Since when?",
+    a: "Prüf mal auf Updates im App Store. Passiert es bei einer bestimmten Aktion oder zufällig?",
+    a_en: "Check for updates in the App Store. Does it happen during a specific action or randomly?",
     followUps: ["Bei bestimmter Aktion", "Passiert zufällig", "Seit einem Update", "Schon immer"],
     followUps_en: ["During specific action", "Happens randomly", "Since an update", "Always been like this"] },
   // ── Report flow: area-specific follow-ups (keep gathering info, no ticket yet) ──
@@ -612,8 +612,8 @@ const FAQ_ENTRIES = [
     followUps: ["Fehlermeldung", "Lädt endlos", "Passiert nichts", "Zugangscode"],
     followUps_en: ["Error message", "Loads forever", "Nothing happens", "Access code"] },
   { q: "seite lädt nicht laden seite",
-    a: "Lädt nicht — sorry! Nur beim Login oder auch woanders? Prüf dein Internet und starte die App neu.",
-    a_en: "Won't load — sorry! Only at login or elsewhere too? Check your internet and restart the app.",
+    a: "Nur beim Login oder auch woanders? Prüf dein Internet und starte die App mal neu.",
+    a_en: "Only at login or elsewhere too? Check your internet and restart the app.",
     followUps: ["Nur beim Login", "Auch woanders", "Internet ist stabil", "App neu gestartet"],
     followUps_en: ["Only at login", "Other places too", "Internet is stable", "Restarted app"] },
   { q: "fehlermeldung beim login login error",
@@ -627,8 +627,8 @@ const FAQ_ENTRIES = [
     followUps: ["Plötzlich verschwunden", "Waren noch nie da", "Nur bestimmte fehlen", "Gar keine da"],
     followUps_en: ["Suddenly disappeared", "Were never there", "Only certain ones missing", "None at all"] },
   { q: "fortschritt nicht angezeigt progress missing",
-    a: "Ärgerlich, sorry! War der Fortschritt vorher da oder wurde er nie angezeigt? Gerät gewechselt?",
-    a_en: "Sorry! Was progress visible before or never shown? Changed devices?",
+    a: "War der Fortschritt vorher da oder wurde er nie angezeigt? Hast du das Gerät gewechselt?",
+    a_en: "Was progress visible before or never shown? Have you changed devices?",
     followUps: ["War vorher da", "Wurde nie angezeigt", "Gerät gewechselt", "App neu installiert"],
     followUps_en: ["Was there before", "Never showed", "Changed device", "Reinstalled app"] },
   { q: "leerer bildschirm leer blank empty screen",
@@ -638,8 +638,8 @@ const FAQ_ENTRIES = [
     followUps_en: ["Always same place", "Different places", "Already tried", "Haven't tried yet"] },
   // ── Only create ticket when user has been through the investigation flow ──
   { q: "schon versucht hilft nicht trotzdem nicht already tried doesnt help still broken nicht gelöst",
-    a: "Tut mir leid! Ich leite das an unser Entwickler-Team weiter, die kümmern sich darum.",
-    a_en: "Sorry about that! I'll forward this to our dev team, they'll take care of it.",
+    a: "Verstehe, das klingt hartnäckig. Ich leite das an unser Entwickler-Team weiter!",
+    a_en: "I understand, that sounds persistent. I'll forward this to our dev team!",
     followUps: ["Andere Frage", "Nein, alles gut!"],
     followUps_en: ["Other question", "No, all good!"],
     createTicket: true },
@@ -777,53 +777,9 @@ function generateToniResponse(message, lang = 'de', entrypoint = null) {
     browser: { de: 'in der App', en: 'in the app' },
   };
 
-  // Check if this matches a trending (frequently reported) issue
-  // Only show trending notice on the first 1-2 messages — after that, use normal flow
-  // to keep the conversation progressing instead of repeating the trending notice
+  // Trending detection is used for dashboard analytics only — it does NOT
+  // change how Toni talks. Toni should always sound human and natural.
   const userMessageCount = chatHistory.filter(m => m.role === 'user').length;
-  const trending = userMessageCount <= 2 ? findTrendingMatch(message, entrypoint) : null;
-  if (trending) {
-    const categoryNames = {
-      crash: { de: 'App-Abstürze', en: 'app crashes' },
-      login: { de: 'Login-Probleme', en: 'login issues' },
-      exercise: { de: 'Probleme mit Übungen', en: 'exercise issues' },
-      audio: { de: 'Audio-Probleme', en: 'audio issues' },
-      display: { de: 'Anzeige-Probleme', en: 'display issues' },
-      performance: { de: 'Performance-Probleme', en: 'performance issues' },
-      payment: { de: 'Zahlungsprobleme', en: 'payment issues' },
-      data: { de: 'Datenprobleme', en: 'data issues' },
-      other: { de: 'dieses Problem', en: 'this issue' },
-    };
-    const catName = categoryNames[trending.category] || categoryNames.other;
-
-    // Build a context-aware trending message
-    let locationHint = '';
-    if (trending.isEntrypointSpecific && trending.entrypoint) {
-      const epLabel = entrypointLabels[trending.entrypoint] || { de: `in "${trending.entrypoint}"`, en: `in "${trending.entrypoint}"` };
-      locationHint = isEn
-        ? `, especially ${epLabel.en}`
-        : `, besonders ${epLabel.de}`;
-    }
-
-    // Still try FAQ for a specific helpful answer, but prepend the trending notice
-    const faqMatch = findBestFaqMatch(message);
-    if (faqMatch) {
-      const trendingNote = isEn
-        ? `⚡ Known issue with ${catName.en}${locationHint} — sorry! `
-        : `⚡ Bekanntes Problem mit ${catName.de}${locationHint} — sorry! `;
-      return {
-        text: trendingNote + (isEn ? (faqMatch.a_en || faqMatch.a) : faqMatch.a),
-        followUps: faqMatch.followUps === null ? null : (isEn ? (faqMatch.followUps_en || faqMatch.followUps || []) : (faqMatch.followUps || [])),
-        createTicket: false, // already known issue
-        isTrending: true,
-      };
-    }
-
-    // No FAQ match but it's trending — ask for details to create a ticket
-    return isEn
-      ? { text: `⚡ Known issue with ${catName.en}${locationHint} — sorry! What exactly happened and what did you see on screen?`, followUps: ["Describe the problem", "When does it happen?", "Create a ticket"], isTrending: true }
-      : { text: `⚡ Bekanntes Problem mit ${catName.de}${locationHint} — sorry! Was genau ist passiert und was hast du auf dem Bildschirm gesehen?`, followUps: ["Problem beschreiben", "Wann passiert es?", "Ticket erstellen"], isTrending: true };
-  }
 
   // Try FAQ match first
   const faqMatch = findBestFaqMatch(message);
@@ -883,12 +839,12 @@ function generateToniResponse(message, lang = 'de', entrypoint = null) {
   // Topic-specific follow-up questions with H.E.A.R.T. tone
   if (isExerciseRelated) {
     const exerciseFallbacksDe = [
-      { text: "Frustrierend, sorry! Bei einer bestimmten Übung oder allen? Siehst du eine Fehlermeldung?", followUps: ["Nur eine Übung", "Alle Übungen", "Fehlermeldung", "Keine Fehlermeldung"] },
+      { text: "Bei einer bestimmten Übung oder allen? Siehst du eine Fehlermeldung?", followUps: ["Nur eine Übung", "Alle Übungen", "Fehlermeldung", "Keine Fehlermeldung"] },
       { text: "Was passiert genau — startet nicht, bleibt hängen, oder reagiert nicht auf Eingabe?", followUps: ["Startet nicht", "Bleibt hängen", "Eingabe wird ignoriert", "Anderes"] },
       { text: "Letzte Frage: Seit wann besteht das Problem? Hat die Übung vorher funktioniert?", followUps: ["Hat vorher funktioniert", "War schon immer so", "Nach einem Update", "Weiß nicht"] },
     ];
     const exerciseFallbacksEn = [
-      { text: "Frustrating, sorry! Specific exercise or all of them? Do you see an error message?", followUps: ["Only one exercise", "All exercises", "Error message", "No error message"] },
+      { text: "Specific exercise or all of them? Do you see an error message?", followUps: ["Only one exercise", "All exercises", "Error message", "No error message"] },
       { text: "What happens exactly — won't start, freezes, or not responding to input?", followUps: ["Won't start", "Freezes", "Input ignored", "Something else"] },
       { text: "Last question: how long has this been happening? Did the exercise work before?", followUps: ["Worked before", "Always been like this", "After an update", "Not sure"] },
     ];
@@ -900,11 +856,11 @@ function generateToniResponse(message, lang = 'de', entrypoint = null) {
 
   if (isLoginRelated) {
     const loginFallbacksDe = [
-      { text: "Login-Problem — ärgerlich, sorry! Fehlermeldung, endloses Laden, oder passiert nichts?", followUps: ["Fehlermeldung", "Lädt endlos", "Passiert nichts", "Passwort vergessen"] },
+      { text: "Was passiert beim Login genau? Fehlermeldung, endloses Laden, oder passiert gar nichts?", followUps: ["Fehlermeldung", "Lädt endlos", "Passiert nichts", "Passwort vergessen"] },
       { text: "Nutzt du E-Mail oder Zugangscode? Hast du dich vorher schon mal einloggen können?", followUps: ["E-Mail", "Zugangscode", "Erstes Mal", "Hat vorher funktioniert"] },
     ];
     const loginFallbacksEn = [
-      { text: "Login trouble — sorry! Error message, endless loading, or nothing happens?", followUps: ["Error message", "Loads forever", "Nothing happens", "Forgot password"] },
+      { text: "What happens at login exactly? Error message, endless loading, or nothing at all?", followUps: ["Error message", "Loads forever", "Nothing happens", "Forgot password"] },
       { text: "Do you use email or access code? Have you logged in successfully before?", followUps: ["Email", "Access code", "First time", "Worked before"] },
     ];
     const fbs = isEn ? loginFallbacksEn : loginFallbacksDe;
@@ -915,15 +871,15 @@ function generateToniResponse(message, lang = 'de', entrypoint = null) {
 
   // Generic H.E.A.R.T. fallbacks when we can't detect the topic
   const fallbacksDe = [
-    { text: "Sorry, dass es hakt! Was hast du gemacht, als das Problem auftrat?", followUps: ["App stürzt ab", "Übung funktioniert nicht", "Login geht nicht", "Etwas anderes"] },
-    { text: "Frustrierend, verstehe! In welchem Bereich der App tritt das Problem auf?", followUps: ["Bei einer Übung", "Beim Einloggen", "Im Dashboard", "Woanders"] },
-    { text: "Ärgerlich, sorry! Passiert das jedes Mal oder nur manchmal?", followUps: ["Jedes Mal", "Nur manchmal", "Nur einmal passiert", "Problem melden"] },
+    { text: "Verstehe! Was hast du gemacht, als das Problem auftrat?", followUps: ["App stürzt ab", "Übung funktioniert nicht", "Login geht nicht", "Etwas anderes"] },
+    { text: "Klar! In welchem Bereich der App tritt das Problem auf?", followUps: ["Bei einer Übung", "Beim Einloggen", "Im Dashboard", "Woanders"] },
+    { text: "Hmm, passiert das jedes Mal oder nur manchmal?", followUps: ["Jedes Mal", "Nur manchmal", "Nur einmal passiert", "Problem melden"] },
   ];
 
   const fallbacksEn = [
-    { text: "Sorry something isn't working! What were you doing when it happened?", followUps: ["App crashes", "Exercise won't load", "Can't log in", "Something else"] },
-    { text: "Frustrating, I get it! Which area of the app does the problem occur in?", followUps: ["During an exercise", "When logging in", "On the dashboard", "Somewhere else"] },
-    { text: "Sorry about that! Does this happen every time or only sometimes?", followUps: ["Every time", "Only sometimes", "Happened once", "Report problem"] },
+    { text: "Got it! What were you doing when it happened?", followUps: ["App crashes", "Exercise won't load", "Can't log in", "Something else"] },
+    { text: "Sure! Which area of the app does the problem occur in?", followUps: ["During an exercise", "When logging in", "On the dashboard", "Somewhere else"] },
+    { text: "Hmm, does this happen every time or only sometimes?", followUps: ["Every time", "Only sometimes", "Happened once", "Report problem"] },
   ];
 
   const fallbacks = isEn ? fallbacksEn : fallbacksDe;
