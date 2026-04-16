@@ -500,11 +500,18 @@ function generateToniResponse(message, lang = 'de') {
 
   // Try FAQ match first
   const faqMatch = findBestFaqMatch(message);
-  if (faqMatch) return {
-    text: isEn ? (faqMatch.a_en || faqMatch.a) : faqMatch.a,
-    followUps: faqMatch.followUps === null ? null : (isEn ? (faqMatch.followUps_en || faqMatch.followUps || []) : (faqMatch.followUps || [])),
-    createTicket: faqMatch.createTicket || false
-  };
+  if (faqMatch) {
+    // Only allow ticket creation after at least 3 exchanges (user messages in history)
+    // This prevents creating a ticket on the very first message
+    const userMessageCount = chatHistory.filter(m => m.role === 'user').length;
+    const allowTicket = faqMatch.createTicket && userMessageCount >= 3;
+
+    return {
+      text: isEn ? (faqMatch.a_en || faqMatch.a) : faqMatch.a,
+      followUps: faqMatch.followUps === null ? null : (isEn ? (faqMatch.followUps_en || faqMatch.followUps || []) : (faqMatch.followUps || [])),
+      createTicket: allowTicket
+    };
+  }
 
   // Fallback: friendly responses
   const lower = message.toLowerCase();
@@ -876,16 +883,16 @@ app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
     const audioBlob = new Blob([req.file.buffer], { type: req.file.mimetype });
     const audioFile = new File([audioBlob], 'recording.webm', { type: req.file.mimetype });
 
-    const lang = req.body?.lang || 'en';
     const result = await elevenlabs.speechToText.convert({
       file: audioFile,
       modelId: 'scribe_v2',
-      languageCode: lang === 'de' ? 'deu' : 'eng',
+      // Don't force language — let scribe auto-detect so users can speak any language
     });
 
     // Normalize "Tony" → "Toni" (common STT misinterpretation)
     const text = (result.text || '').replace(/\bTony\b/gi, 'Toni');
-    res.json({ text });
+    const detectedLang = result.language_code || '';
+    res.json({ text, detectedLang });
   } catch (err) {
     console.error('Transcription error:', err.message);
     res.status(500).json({ error: 'Transcription failed' });
@@ -915,10 +922,33 @@ app.get("/api/conversation-url", async (req, res) => {
 // Text chat endpoint — generate response + TTS audio
 const chatHistory = [];
 
+// Detect if a message is German or English based on common words
+function detectMessageLang(message, fallback = 'de') {
+  const lower = message.toLowerCase();
+  const deWords = ['ich', 'die', 'der', 'das', 'und', 'ist', 'nicht', 'ein', 'eine', 'mir', 'mich', 'hab', 'habe', 'kann', 'geht', 'bei', 'mein', 'meine', 'auch', 'noch', 'app', 'wie', 'was', 'wann', 'warum', 'funktioniert', 'problem', 'hilfe', 'bitte', 'danke', 'übung', 'hallo', 'guten', 'morgen', 'tag'];
+  const enWords = ['the', 'is', 'are', 'was', 'have', 'has', 'not', 'my', 'can', 'how', 'what', 'when', 'why', 'with', 'this', 'that', 'help', 'please', 'thank', 'hello', 'problem', 'does', 'work', 'working'];
+
+  const words = lower.split(/\s+/);
+  let deScore = 0, enScore = 0;
+  for (const w of words) {
+    if (deWords.includes(w)) deScore++;
+    if (enWords.includes(w)) enScore++;
+  }
+  // Also check for German-specific characters
+  if (/[äöüß]/.test(lower)) deScore += 2;
+
+  if (deScore > enScore) return 'de';
+  if (enScore > deScore) return 'en';
+  return fallback;
+}
+
 app.post("/api/chat", async (req, res) => {
   try {
-    const { message, voiceKey = "bella", lang = "de" } = req.body;
+    const { message, voiceKey = "bella", lang: clientLang = "de" } = req.body;
     if (!message) return res.status(400).json({ error: "message required" });
+
+    // Detect language from message content (override browser locale)
+    const lang = detectMessageLang(message, clientLang);
 
     const voice = VOICES[voiceKey] || VOICES.bella;
 
