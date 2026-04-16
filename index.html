@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Toni</title>
   <style>
     /* ── Design System Tokens ── */
@@ -39,7 +39,15 @@
       --btn-primary: #3949F5;
       --btn-primary-hover: #2833AC;
       --btn-primary-pressed: #1E2678;
+      --btn-secondary-pressed: #EBECFC;
       --btn-disabled: #C8CAD8;
+
+      /* Border */
+      --border-neutral-light: #F1F2F5;
+      --border-brand: #D7DBFD;
+
+      /* Elevation */
+      --elevation-standard: #F1F2F5;
 
       /* Corner Radius */
       --cr-5: 5px;
@@ -81,212 +89,254 @@
     body {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
+      height: 100dvh;
       background: var(--surface-background);
       font-family: var(--font-family);
       color: var(--text-primary);
-      padding: var(--space-xl);
+      overflow: hidden;
     }
 
-    /* ── Main Card Container ── */
-    .toni-card {
-      background: var(--surface-container);
-      border-radius: var(--cr-40);
-      box-shadow: 0 2px 20px rgba(11, 15, 49, 0.06), 0 0 0 1px rgba(57, 73, 245, 0.06);
-      padding: var(--space-xxl) var(--space-xxl) var(--space-xl);
+    /* ── Chat Container ── */
+    .chat-container {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      max-width: 480px;
+      height: 100%;
+      max-width: 600px;
       width: 100%;
+      margin: 0 auto;
+      background: var(--surface-container);
     }
 
-    /* ── Character Stage ── */
-    .stage { width: 320px; height: 320px; }
-    .stage svg { width: 100%; height: 100%; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .stage svg { animation: float 3s ease-in-out infinite; }
-
-    /* ── Voice & Chat Section ── */
-    .talk-section {
-      margin-top: var(--space-xl);
+    /* ── Header ── */
+    .chat-header {
       display: flex;
-      flex-direction: column;
       align-items: center;
       gap: var(--space-m);
-      width: 100%;
+      padding: var(--space-l) var(--space-xl);
+      border-bottom: 1px solid var(--border-neutral-light);
+      background: var(--surface-container);
+      flex-shrink: 0;
     }
-
-    /* ── Voice Selector ── */
-    .voice-row {
+    .header-avatar {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+    .header-avatar svg {
+      width: 100%;
+      height: 100%;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+    .header-info {
       display: flex;
-      align-items: center;
-      gap: var(--space-s);
-      width: 100%;
+      flex-direction: column;
+      gap: 2px;
     }
-    .voice-row label {
-      font-size: var(--label-large);
-      font-weight: var(--weight-medium);
-      color: var(--text-secondary);
-      white-space: nowrap;
-    }
-    .voice-row select {
-      flex: 1;
-      padding: var(--space-s) var(--space-m);
-      border: 1.5px solid var(--primary-200);
-      border-radius: var(--cr-10);
-      font-family: var(--font-family);
-      font-size: var(--body-medium);
-      font-weight: var(--weight-medium);
+    .header-name {
+      font-size: var(--title-small);
+      font-weight: var(--weight-semibold);
       color: var(--text-primary);
-      background: var(--surface-container-low);
-      outline: none;
-      cursor: pointer;
-      transition: border-color 0.15s;
-      -webkit-appearance: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%235A5E7A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 32px;
     }
-    .voice-row select:focus {
-      border-color: var(--btn-primary);
-      box-shadow: 0 0 0 3px rgba(57, 73, 245, 0.1);
+    .header-subtitle {
+      font-size: var(--label-medium);
+      font-weight: var(--weight-regular);
+      color: var(--text-tertiary);
     }
-
-    /* ── Conversation Button (Record Audio) ── */
-    .convo-btn {
-      width: 64px;
-      height: 64px;
+    .header-actions {
+      margin-left: auto;
+      display: flex;
+      gap: var(--space-s);
+    }
+    .header-icon-btn {
+      width: 36px;
+      height: 36px;
       border: none;
-      border-radius: 50%;
-      font-size: 0;
+      border-radius: var(--cr-round);
+      background: transparent;
       cursor: pointer;
-      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
+      color: var(--text-tertiary);
+      transition: background 0.15s;
     }
-    .convo-btn.start {
-      background: var(--btn-primary);
-      box-shadow: 0 4px 16px rgba(57, 73, 245, 0.3);
+    .header-icon-btn:hover {
+      background: var(--primary-50);
     }
-    .convo-btn.start:hover {
-      background: var(--btn-primary-hover);
-      box-shadow: 0 6px 20px rgba(57, 73, 245, 0.4);
-      transform: scale(1.05);
-    }
-    .convo-btn.stop {
-      background: var(--error);
-      box-shadow: 0 4px 16px rgba(232, 52, 90, 0.3);
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-    .convo-btn.stop:hover {
-      background: var(--error-hover);
-    }
-    .convo-btn:disabled {
-      background: var(--btn-disabled);
-      cursor: default;
-      animation: none;
-      box-shadow: none;
-      transform: none;
+    .header-icon-btn svg {
+      width: 20px;
+      height: 20px;
     }
 
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(232, 52, 90, 0.35); }
-      50% { box-shadow: 0 0 0 14px rgba(232, 52, 90, 0); }
+    /* ── Messages Area ── */
+    .messages-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-l);
+    }
+    .messages-area::-webkit-scrollbar { width: 4px; }
+    .messages-area::-webkit-scrollbar-track { background: transparent; }
+    .messages-area::-webkit-scrollbar-thumb { background: var(--primary-200); border-radius: 2px; }
+
+    /* ── Message Bubbles ── */
+    .msg-row {
+      display: flex;
+      gap: var(--space-s);
+      max-width: 85%;
+    }
+    .msg-row.toni { align-self: flex-start; }
+    .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
+
+    .msg-bubble {
+      padding: var(--space-m) var(--space-l);
+      font-size: var(--body-medium);
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+    .msg-row.toni .msg-bubble {
+      background: var(--surface-container-high);
+      border-radius: var(--cr-20) var(--cr-20) var(--cr-20) var(--cr-5);
+      color: var(--text-primary);
+    }
+    .msg-row.user .msg-bubble {
+      background: var(--primary-50);
+      border-radius: var(--cr-20) var(--cr-20) var(--cr-5) var(--cr-20);
+      color: var(--text-primary);
     }
 
-    .mic-icon {
-      width: 24px;
-      height: 24px;
-      fill: white;
-    }
-    .stop-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 3px;
-      background: white;
-    }
-
-    .convo-label {
-      font-size: var(--label-large);
-      font-weight: var(--weight-medium);
-      color: var(--text-secondary);
-      margin-top: var(--space-xs);
-    }
-
-    /* ── Divider ── */
-    .divider {
-      width: 100%;
+    .msg-meta {
       display: flex;
       align-items: center;
-      gap: var(--space-m);
-      margin: var(--space-s) 0;
+      gap: var(--space-s);
+      margin-top: var(--space-xs);
     }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--primary-100);
+    .msg-time {
+      font-size: var(--label-small);
+      color: var(--text-tertiary);
     }
-    .divider span {
+
+    /* ── Play Audio Button (from design system) ── */
+    .play-audio-btn {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid var(--border-neutral-light);
+      border-radius: var(--cr-round);
+      background: var(--surface-container);
+      box-shadow: 0 2px 0 0 var(--elevation-standard);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .play-audio-btn:hover {
+      border-color: var(--border-brand);
+      background: var(--primary-50);
+    }
+    .play-audio-btn:active {
+      background: var(--btn-secondary-pressed);
+      border-color: var(--border-brand);
+      box-shadow: none;
+    }
+    .play-audio-btn.playing {
+      border-color: var(--border-brand);
+      background: var(--surface-container);
+    }
+    .play-audio-btn.playing .progress-ring {
+      display: block;
+    }
+    .play-audio-btn svg.icon {
+      width: 16px;
+      height: 16px;
+      fill: var(--primary-500);
+    }
+    .play-audio-btn .progress-ring {
+      display: none;
+      position: absolute;
+      inset: -1px;
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+    }
+    .play-audio-btn .progress-ring circle {
+      fill: none;
+      stroke: var(--primary-500);
+      stroke-width: 2;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: center;
+      transition: stroke-dashoffset 0.1s linear;
+    }
+
+    /* ── Quick Reply Chips ── */
+    .quick-replies {
+      padding: 0 var(--space-xl) var(--space-l);
+      flex-shrink: 0;
+    }
+    .quick-replies-label {
       font-size: var(--label-medium);
       font-weight: var(--weight-medium);
       color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      margin-bottom: var(--space-s);
     }
-
-    /* ── Chat Area ── */
-    .chat-area {
-      width: 100%;
-      max-height: 120px;
-      overflow-y: auto;
+    .chips-scroll {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: var(--space-s);
-      padding: var(--space-s) 0;
     }
-    .chat-area:empty { display: none; }
-    .chat-msg {
-      padding: var(--space-s) var(--space-m);
-      border-radius: var(--cr-20);
-      font-size: var(--body-medium);
-      line-height: 1.45;
-      max-width: 85%;
-      word-wrap: break-word;
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1.5px solid var(--primary-200);
+      border-radius: var(--cr-round);
+      background: var(--surface-container);
+      color: var(--text-secondary);
+      font-family: var(--font-family);
+      font-size: var(--label-medium);
+      font-weight: var(--weight-medium);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      line-height: 1;
     }
-    .chat-msg.user {
-      align-self: flex-end;
+    .chip:hover {
       background: var(--primary-50);
-      color: var(--text-primary);
-      border-bottom-right-radius: var(--cr-5);
+      border-color: var(--primary-400);
+      color: var(--btn-primary);
     }
-    .chat-msg.toni {
-      align-self: flex-start;
-      background: var(--surface-container-high);
-      color: var(--text-primary);
-      border-bottom-left-radius: var(--cr-5);
+    .chip:active {
+      background: var(--btn-secondary-pressed);
+    }
+    .chip-icon {
+      font-size: 14px;
+      line-height: 1;
     }
 
-    /* ── Text Input Row ── */
-    .talk-box {
+    /* ── Input Bar ── */
+    .input-bar {
       display: flex;
+      align-items: center;
       gap: var(--space-s);
-      width: 100%;
+      padding: var(--space-m) var(--space-xl) var(--space-xl);
+      border-top: 1px solid var(--border-neutral-light);
+      background: var(--surface-container);
+      flex-shrink: 0;
     }
-    .talk-box input[type="text"] {
+    .input-field {
       flex: 1;
-      padding: var(--space-s) var(--space-l);
+      padding: 10px var(--space-l);
       border: 1.5px solid var(--primary-200);
       border-radius: var(--cr-30);
       font-family: var(--font-family);
@@ -296,47 +346,135 @@
       outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .talk-box input[type="text"]::placeholder {
-      color: var(--text-tertiary);
-    }
-    .talk-box input[type="text"]:focus {
+    .input-field::placeholder { color: var(--text-tertiary); }
+    .input-field:focus {
       border-color: var(--btn-primary);
       box-shadow: 0 0 0 3px rgba(57, 73, 245, 0.1);
     }
-    .talk-btn {
-      padding: var(--space-s) var(--space-xl);
-      border: none;
-      border-radius: var(--cr-30);
-      background: var(--btn-primary);
-      color: var(--text-on-primary);
-      font-family: var(--font-family);
-      font-size: var(--body-medium);
-      font-weight: var(--weight-semibold);
+
+    /* Mic button (voice mode toggle) */
+    .mic-btn {
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid var(--primary-200);
+      border-radius: 50%;
+      background: var(--surface-container);
       cursor: pointer;
-      transition: background 0.15s;
-      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
     }
-    .talk-btn:hover { background: var(--btn-primary-hover); }
-    .talk-btn:disabled { background: var(--btn-disabled); cursor: default; }
+    .mic-btn svg { width: 20px; height: 20px; fill: var(--primary-500); }
+    .mic-btn:hover {
+      background: var(--primary-50);
+      border-color: var(--primary-400);
+    }
+    .mic-btn.recording {
+      background: var(--error);
+      border-color: var(--error);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    .mic-btn.recording svg { fill: white; }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232, 52, 90, 0.35); }
+      50% { box-shadow: 0 0 0 10px rgba(232, 52, 90, 0); }
+    }
 
-    /* ── Status Text ── */
-    .status-text {
-      font-size: var(--body-small);
+    /* Send button */
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: var(--btn-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .send-btn svg { width: 20px; height: 20px; fill: white; }
+    .send-btn:hover:not(:disabled) { background: var(--btn-primary-hover); }
+    .send-btn:disabled {
+      background: var(--btn-disabled);
+      cursor: default;
+      opacity: 0.5;
+    }
+
+    /* ── Loading dots ── */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: var(--space-m) var(--space-l);
+      align-items: center;
+    }
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary-300);
+      animation: typingBounce 1.2s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ── Debug Panel (expression showcase) ── */
+    .debug-panel {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface-container);
+      border-top: 1px solid var(--primary-100);
+      padding: var(--space-l);
+      z-index: 100;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    }
+    .debug-panel.open { display: block; }
+    .debug-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-m);
+    }
+    .debug-panel-title {
+      font-size: var(--label-large);
+      font-weight: var(--weight-semibold);
+      color: var(--text-primary);
+    }
+    .debug-close {
+      background: none;
+      border: none;
+      cursor: pointer;
       color: var(--text-tertiary);
-      min-height: 18px;
-      text-align: center;
+      font-size: 20px;
+      line-height: 1;
     }
-
-    /* ── Expression Controls ── */
-    .controls {
+    .debug-stage {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto var(--space-m);
+    }
+    .debug-stage svg {
+      width: 100%;
+      height: 100%;
+      animation: float 3s ease-in-out infinite;
+    }
+    .expression-chips {
       display: flex;
       gap: 6px;
-      margin-top: var(--space-l);
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 480px;
     }
-    .controls button {
+    .expression-chips button {
       padding: 6px 14px;
       border: 1.5px solid var(--primary-200);
       border-radius: var(--cr-round);
@@ -348,99 +486,130 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-    .controls button:hover {
+    .expression-chips button:hover {
       background: var(--primary-50);
       border-color: var(--primary-400);
       color: var(--btn-primary);
     }
-    .controls button.active {
+    .expression-chips button.active {
       background: var(--btn-primary);
       color: var(--text-on-primary);
       border-color: var(--btn-primary);
     }
 
-    /* ── Scrollbar ── */
-    .chat-area::-webkit-scrollbar { width: 4px; }
-    .chat-area::-webkit-scrollbar-track { background: transparent; }
-    .chat-area::-webkit-scrollbar-thumb { background: var(--primary-200); border-radius: 2px; }
+    /* Ensure safe area on iOS */
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      .input-bar {
+        padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom));
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="toni-card">
-    <div class="stage">
-      <svg id="toni" width="2404" height="2404" viewBox="0 0 2404 2404" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Body outline shadow -->
-        <path d="M259.679 1716C143.679 1467 260.367 1153.79 581.626 1070.2C902.886 986.605 1766.48 982.673 1882.89 1070.2M1882.89 1070.2C2028.4 1179.61 1550.29 1843.19 1342.41 1843.19C1194.92 1843.19 1274.58 913.746 1445.26 840.442C1502.37 815.913 1553.97 784.523 1602.81 756.357M1882.89 1070.2C1995.58 1151.53 2180.68 1273.5 2060.68 1609.5M1882.89 1070.2C1912.43 1016.07 1957.29 902.283 2217.68 969.022M1602.81 756.357C1699.91 700.352 1786.07 657.096 1882.89 705.87C2028.4 779.174 1312.87 1931.81 1022.94 1882.58C687.484 1825.61 1213.31 806.844 1602.81 756.357ZM1602.81 756.357C1436.87 1132.3 994.495 1843.19 683.776 1843.19C295.377 1843.19 1024.04 539.048 1400.4 551.083C1609.24 557.761 1479.53 917.086 1178.3 1217.34M1178.3 1217.34C936.673 1458.19 669.381 1637.95 539.358 1583.9C366.492 1512.03 453.093 966.993 733.179 756.357C1013.26 545.721 1433.22 550.493 1178.3 1217.34Z" stroke="#2833AC" stroke-width="185.994" stroke-linecap="square"/>
-        <!-- Body outline main -->
-        <path d="M209.179 1690.5C144.179 1430 212.367 1121.79 533.626 1038.2C854.886 954.605 1718.48 950.673 1834.89 1038.2M1834.89 1038.2C1980.4 1147.61 1502.29 1811.19 1294.41 1811.19C1146.92 1811.19 1226.58 881.746 1397.26 808.442C1454.37 783.913 1505.97 752.523 1554.81 724.357M1834.89 1038.2C1947.58 1119.53 2129.94 1283.6 1996.18 1576M1834.89 1038.2C1864.43 984.068 1909.29 870.283 2169.68 937.022M1554.81 724.357C1651.91 668.352 1738.07 625.096 1834.89 673.87C1980.4 747.174 1264.87 1899.81 974.942 1850.58C639.484 1793.61 1165.31 774.844 1554.81 724.357ZM1554.81 724.357C1388.87 1100.3 946.495 1811.19 635.776 1811.19C247.377 1811.19 976.037 507.048 1352.4 519.083C1561.24 525.761 1431.53 885.086 1130.3 1185.34M1130.3 1185.34C888.673 1426.19 621.381 1605.95 491.358 1551.9C318.492 1480.03 413.093 934.993 693.179 724.357C973.265 513.721 1385.22 518.493 1130.3 1185.34Z" stroke="#3949F5" stroke-width="185.994" stroke-linecap="square"/>
+  <div class="chat-container">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="header-avatar">
+        <svg viewBox="0 0 2404 2404" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M259.679 1716C143.679 1467 260.367 1153.79 581.626 1070.2C902.886 986.605 1766.48 982.673 1882.89 1070.2M1882.89 1070.2C2028.4 1179.61 1550.29 1843.19 1342.41 1843.19C1194.92 1843.19 1274.58 913.746 1445.26 840.442C1502.37 815.913 1553.97 784.523 1602.81 756.357M1882.89 1070.2C1995.58 1151.53 2180.68 1273.5 2060.68 1609.5M1882.89 1070.2C1912.43 1016.07 1957.29 902.283 2217.68 969.022M1602.81 756.357C1699.91 700.352 1786.07 657.096 1882.89 705.87C2028.4 779.174 1312.87 1931.81 1022.94 1882.58C687.484 1825.61 1213.31 806.844 1602.81 756.357ZM1602.81 756.357C1436.87 1132.3 994.495 1843.19 683.776 1843.19C295.377 1843.19 1024.04 539.048 1400.4 551.083C1609.24 557.761 1479.53 917.086 1178.3 1217.34M1178.3 1217.34C936.673 1458.19 669.381 1637.95 539.358 1583.9C366.492 1512.03 453.093 966.993 733.179 756.357C1013.26 545.721 1433.22 550.493 1178.3 1217.34Z" stroke="#2833AC" stroke-width="185.994" stroke-linecap="square"/>
+          <path d="M209.179 1690.5C144.179 1430 212.367 1121.79 533.626 1038.2C854.886 954.605 1718.48 950.673 1834.89 1038.2M1834.89 1038.2C1980.4 1147.61 1502.29 1811.19 1294.41 1811.19C1146.92 1811.19 1226.58 881.746 1397.26 808.442C1454.37 783.913 1505.97 752.523 1554.81 724.357M1834.89 1038.2C1947.58 1119.53 2129.94 1283.6 1996.18 1576M1834.89 1038.2C1864.43 984.068 1909.29 870.283 2169.68 937.022M1554.81 724.357C1651.91 668.352 1738.07 625.096 1834.89 673.87C1980.4 747.174 1264.87 1899.81 974.942 1850.58C639.484 1793.61 1165.31 774.844 1554.81 724.357ZM1554.81 724.357C1388.87 1100.3 946.495 1811.19 635.776 1811.19C247.377 1811.19 976.037 507.048 1352.4 519.083C1561.24 525.761 1431.53 885.086 1130.3 1185.34M1130.3 1185.34C888.673 1426.19 621.381 1605.95 491.358 1551.9C318.492 1480.03 413.093 934.993 693.179 724.357C973.265 513.721 1385.22 518.493 1130.3 1185.34Z" stroke="#3949F5" stroke-width="185.994" stroke-linecap="square"/>
+          <ellipse cx="915" cy="1116" rx="130" ry="190" fill="white"/>
+          <ellipse cx="1413" cy="1116" rx="130" ry="190" fill="white"/>
+          <circle cx="940" cy="1130" r="70" fill="#0B0F31"/>
+          <circle cx="960" cy="1100" r="20" fill="white"/>
+          <circle cx="1438" cy="1130" r="70" fill="#0B0F31"/>
+          <circle cx="1458" cy="1100" r="20" fill="white"/>
+          <path d="M961 1490 Q1161 1570 1361 1490" stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="header-info">
+        <div class="header-name">Toni</div>
+        <div class="header-subtitle">Always here to help</div>
+      </div>
+      <div class="header-actions">
+        <button class="header-icon-btn" id="debug-toggle" onclick="toggleDebugPanel()" title="Expression showcase">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
 
-        <!-- Face group -->
+    <!-- Messages -->
+    <div class="messages-area" id="messages-area"></div>
+
+    <!-- Quick Reply Chips -->
+    <div class="quick-replies" id="quick-replies">
+      <div class="quick-replies-label">Select a common issue to get started quickly:</div>
+      <div class="chips-scroll">
+        <button class="chip" onclick="sendQuickReply(this)"><span class="chip-icon">⚡</span> App crashes or freezes</button>
+        <button class="chip" onclick="sendQuickReply(this)"><span class="chip-icon">🔑</span> Login issues</button>
+        <button class="chip" onclick="sendQuickReply(this)"><span class="chip-icon">💳</span> Payment problems</button>
+        <button class="chip" onclick="sendQuickReply(this)"><span class="chip-icon">⚙️</span> Feature not working</button>
+        <button class="chip" onclick="sendQuickReply(this)"><span class="chip-icon">🐌</span> App is too slow</button>
+        <button class="chip" onclick="sendQuickReply(this)"><span class="chip-icon">🎨</span> Display or UI issue</button>
+        <button class="chip" onclick="sendQuickReply(this)"><span class="chip-icon">🔄</span> Data sync problem</button>
+        <button class="chip" onclick="sendQuickReply(this)"><span class="chip-icon">💬</span> Other feedback</button>
+      </div>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="input-bar">
+      <input type="text" class="input-field" id="input-field" placeholder="Type your message..." />
+      <button class="mic-btn" id="mic-btn" onclick="toggleVoice()" title="Voice input">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/>
+          <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+        </svg>
+      </button>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Debug Panel (expression showcase) -->
+  <div class="debug-panel" id="debug-panel">
+    <div class="debug-panel-header">
+      <span class="debug-panel-title">Expression Showcase</span>
+      <button class="debug-close" onclick="toggleDebugPanel()">&times;</button>
+    </div>
+    <div class="debug-stage">
+      <svg id="toni" viewBox="0 0 2404 2404" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M259.679 1716C143.679 1467 260.367 1153.79 581.626 1070.2C902.886 986.605 1766.48 982.673 1882.89 1070.2M1882.89 1070.2C2028.4 1179.61 1550.29 1843.19 1342.41 1843.19C1194.92 1843.19 1274.58 913.746 1445.26 840.442C1502.37 815.913 1553.97 784.523 1602.81 756.357M1882.89 1070.2C1995.58 1151.53 2180.68 1273.5 2060.68 1609.5M1882.89 1070.2C1912.43 1016.07 1957.29 902.283 2217.68 969.022M1602.81 756.357C1699.91 700.352 1786.07 657.096 1882.89 705.87C2028.4 779.174 1312.87 1931.81 1022.94 1882.58C687.484 1825.61 1213.31 806.844 1602.81 756.357ZM1602.81 756.357C1436.87 1132.3 994.495 1843.19 683.776 1843.19C295.377 1843.19 1024.04 539.048 1400.4 551.083C1609.24 557.761 1479.53 917.086 1178.3 1217.34M1178.3 1217.34C936.673 1458.19 669.381 1637.95 539.358 1583.9C366.492 1512.03 453.093 966.993 733.179 756.357C1013.26 545.721 1433.22 550.493 1178.3 1217.34Z" stroke="#2833AC" stroke-width="185.994" stroke-linecap="square"/>
+        <path d="M209.179 1690.5C144.179 1430 212.367 1121.79 533.626 1038.2C854.886 954.605 1718.48 950.673 1834.89 1038.2M1834.89 1038.2C1980.4 1147.61 1502.29 1811.19 1294.41 1811.19C1146.92 1811.19 1226.58 881.746 1397.26 808.442C1454.37 783.913 1505.97 752.523 1554.81 724.357M1834.89 1038.2C1947.58 1119.53 2129.94 1283.6 1996.18 1576M1834.89 1038.2C1864.43 984.068 1909.29 870.283 2169.68 937.022M1554.81 724.357C1651.91 668.352 1738.07 625.096 1834.89 673.87C1980.4 747.174 1264.87 1899.81 974.942 1850.58C639.484 1793.61 1165.31 774.844 1554.81 724.357ZM1554.81 724.357C1388.87 1100.3 946.495 1811.19 635.776 1811.19C247.377 1811.19 976.037 507.048 1352.4 519.083C1561.24 525.761 1431.53 885.086 1130.3 1185.34M1130.3 1185.34C888.673 1426.19 621.381 1605.95 491.358 1551.9C318.492 1480.03 413.093 934.993 693.179 724.357C973.265 513.721 1385.22 518.493 1130.3 1185.34Z" stroke="#3949F5" stroke-width="185.994" stroke-linecap="square"/>
         <g id="face">
           <ellipse id="left-eye-white" cx="915" cy="1116" rx="180" ry="259" fill="white"/>
           <ellipse id="right-eye-white" cx="1413" cy="1116" rx="180" ry="259" fill="white"/>
-          <g id="left-eye">
-            <circle cx="940" cy="1130" r="95" fill="#0B0F31"/>
-            <circle cx="970" cy="1095" r="28" fill="white"/>
-          </g>
-          <g id="right-eye">
-            <circle cx="1438" cy="1130" r="95" fill="#0B0F31"/>
-            <circle cx="1468" cy="1095" r="28" fill="white"/>
-          </g>
+          <g id="left-eye"><circle cx="940" cy="1130" r="95" fill="#0B0F31"/><circle cx="970" cy="1095" r="28" fill="white"/></g>
+          <g id="right-eye"><circle cx="1438" cy="1130" r="95" fill="#0B0F31"/><circle cx="1468" cy="1095" r="28" fill="white"/></g>
           <path id="left-brow" d="" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none" style="display:none"/>
           <path id="right-brow" d="" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none" style="display:none"/>
           <g id="mouth-group"></g>
         </g>
       </svg>
     </div>
-
-    <div class="talk-section">
-      <!-- Voice selector -->
-      <div class="voice-row">
-        <label for="voice-select">Voice</label>
-        <select id="voice-select"></select>
-      </div>
-
-      <!-- Conversation button (Record Audio style) -->
-      <button class="convo-btn start" id="convo-btn" onclick="toggleConversation()">
-        <svg class="mic-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/>
-          <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-        </svg>
-      </button>
-      <div class="convo-label" id="convo-label">Talk to Toni</div>
-
-      <!-- Divider -->
-      <div class="divider"><span>or type</span></div>
-
-      <!-- Chat messages -->
-      <div class="chat-area" id="chat-area"></div>
-
-      <!-- Text input -->
-      <div class="talk-box">
-        <input type="text" id="talk-input" placeholder="Ask Toni something..." />
-        <button class="talk-btn" id="speak-btn" onclick="sendChat()">Send</button>
-      </div>
-
-      <div class="status-text" id="status-text"></div>
+    <div class="expression-chips">
+      <button onclick="setExpression('happy')" id="btn-happy" class="active">Happy</button>
+      <button onclick="setExpression('excited')" id="btn-excited">Excited</button>
+      <button onclick="setExpression('surprised')" id="btn-surprised">Surprised</button>
+      <button onclick="setExpression('sad')" id="btn-sad">Sad</button>
+      <button onclick="setExpression('angry')" id="btn-angry">Angry</button>
+      <button onclick="setExpression('love')" id="btn-love">Love</button>
+      <button onclick="setExpression('sleepy')" id="btn-sleepy">Sleepy</button>
+      <button onclick="setExpression('skeptical')" id="btn-skeptical">Skeptical</button>
+      <button onclick="setExpression('cheeky')" id="btn-cheeky">Cheeky</button>
+      <button onclick="setExpression('dead')" id="btn-dead">Dizzy</button>
+      <button onclick="setExpression('lookaway')" id="btn-lookaway">Side-eye</button>
     </div>
   </div>
 
-  <div class="controls">
-    <button onclick="setExpression('happy')" id="btn-happy" class="active">Happy</button>
-    <button onclick="setExpression('excited')" id="btn-excited">Excited</button>
-    <button onclick="setExpression('surprised')" id="btn-surprised">Surprised</button>
-    <button onclick="setExpression('sad')" id="btn-sad">Sad</button>
-    <button onclick="setExpression('angry')" id="btn-angry">Angry</button>
-    <button onclick="setExpression('love')" id="btn-love">Love</button>
-    <button onclick="setExpression('sleepy')" id="btn-sleepy">Sleepy</button>
-    <button onclick="setExpression('skeptical')" id="btn-skeptical">Skeptical</button>
-    <button onclick="setExpression('cheeky')" id="btn-cheeky">Cheeky</button>
-    <button onclick="setExpression('dead')" id="btn-dead">Dizzy</button>
-    <button onclick="setExpression('lookaway')" id="btn-lookaway">Side-eye</button>
-  </div>
-
   <script>
-    // ---- Element refs ----
+    // =============================================
+    // ELEMENT REFS
+    // =============================================
     const leftEyeWhite = document.getElementById('left-eye-white');
     const rightEyeWhite = document.getElementById('right-eye-white');
     const leftEye = document.getElementById('left-eye');
@@ -448,98 +617,78 @@
     const leftBrow = document.getElementById('left-brow');
     const rightBrow = document.getElementById('right-brow');
     const mouthGroup = document.getElementById('mouth-group');
-    const statusText = document.getElementById('status-text');
-    const talkInput = document.getElementById('talk-input');
-    const speakBtn = document.getElementById('speak-btn');
-    const convoBtn = document.getElementById('convo-btn');
-    const convoLabel = document.getElementById('convo-label');
-    const chatArea = document.getElementById('chat-area');
-    const voiceSelect = document.getElementById('voice-select');
+    const messagesArea = document.getElementById('messages-area');
+    const inputField = document.getElementById('input-field');
+    const sendBtn = document.getElementById('send-btn');
+    const micBtn = document.getElementById('mic-btn');
+    const quickReplies = document.getElementById('quick-replies');
 
     // =============================================
     // APP CONTEXT (received from native WebView host)
     // =============================================
-    // The host app injects this before document load or calls window.setAppContext()
     window.appContext = window.appContext || {};
 
     window.setAppContext = function(ctx) {
       window.appContext = ctx;
       console.log('App context received:', ctx);
-
-      // Apply language — switch Toni's agent language if German
       if (ctx.language && ctx.language !== 'en') {
         window.appContext._lang = ctx.language;
       }
-
-      // Apply entrypoint — could customize Toni's behavior per exercise
       if (ctx.entrypoint) {
         console.log('Entrypoint:', ctx.entrypoint);
       }
-
-      // Notify the host that Toni is ready
       if (window.webkit?.messageHandlers?.toni) {
         window.webkit.messageHandlers.toni.postMessage({ type: 'ready' });
       }
     };
 
-    // Load voices into selector
-    fetch('/api/voices').then(r => r.json()).then(voices => {
-      voices.forEach(v => {
-        const opt = document.createElement('option');
-        opt.value = v.key;
-        opt.textContent = v.name;
-        voiceSelect.appendChild(opt);
-      });
-    }).catch(() => {
-      const opt = document.createElement('option');
-      opt.value = 'bella'; opt.textContent = 'Bella';
-      voiceSelect.appendChild(opt);
-    });
-
-    const DEFAULT = {
-      leftWhite: { cx: 915, cy: 1116, rx: 180, ry: 259 },
-      rightWhite: { cx: 1413, cy: 1116, rx: 180, ry: 259 },
-    };
-
+    // =============================================
+    // STATE
+    // =============================================
     let currentExpression = 'happy';
     let blinkTimeout = null;
-    let speakTimeout = null;
-    let isSpeaking = false;
-    let animFrameId = null;
+    let isBusy = false;
+    let inputMode = 'text'; // 'text' or 'voice'
 
-    // Conversation state
+    // Voice conversation state
     let ws = null;
     let isConversationActive = false;
     let micStream = null;
     let micProcessor = null;
     let audioContext = null;
-    let playbackQueue = [];
-    let isPlaying = false;
+    let animFrameId = null;
+    let pcmBuffer = [];
+    let isPlayingAudio = false;
+    let playbackGain = null;
+    let playbackAnalyser = null;
+    let agentAudioFormat = 'pcm_16000';
+
+    // Track currently playing message audio
+    let currentPlayingBtn = null;
+    let currentPlayingSource = null;
 
     const MX = 1161, MY = 1490;
+    const DEFAULT = {
+      leftWhite: { cx: 915, cy: 1116, rx: 180, ry: 259 },
+      rightWhite: { cx: 1413, cy: 1116, rx: 180, ry: 259 },
+    };
 
     // =============================================
     // VISEME MOUTH SHAPES
     // =============================================
     const visemes = {
-      rest: () => `
-        <path d="M${MX-200} ${MY} Q${MX} ${MY+90} ${MX+200} ${MY}"
-              stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`,
-      BMP: () => `
-        <path d="M${MX-170} ${MY} L${MX+170} ${MY}"
-              stroke="#0B0F31" stroke-width="50" stroke-linecap="round" fill="none"/>`,
+      rest: () => `<path d="M${MX-200} ${MY} Q${MX} ${MY+90} ${MX+200} ${MY}" stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`,
+      BMP: () => `<path d="M${MX-170} ${MY} L${MX+170} ${MY}" stroke="#0B0F31" stroke-width="50" stroke-linecap="round" fill="none"/>`,
       AEI: () => {
         const w = 180, h = 110;
-        return `
-          <ellipse cx="${MX}" cy="${MY+10}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+        return `<ellipse cx="${MX}" cy="${MY+10}" rx="${w}" ry="${h}" fill="#0B0F31"/>
           <rect x="${MX-w}" y="${MY-h+10}" width="${w*2}" height="40" rx="6" fill="white" opacity="0.95"/>
           <rect x="${MX-w+15}" y="${MY+h-40}" width="${w*2-30}" height="35" rx="6" fill="white" opacity="0.95"/>
           <ellipse cx="${MX}" cy="${MY+h-25}" rx="70" ry="42" fill="#E8345A"/>`;
       },
       Ee: () => {
         const w = 185, h = 60;
-        return `
-          <ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+        return `<ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
           <rect x="${MX-w}" y="${MY-h}" width="${w*2}" height="35" rx="6" fill="white" opacity="0.95"/>
           <rect x="${MX-w+15}" y="${MY+h-32}" width="${w*2-30}" height="28" rx="6" fill="white" opacity="0.95"/>`;
       },
@@ -547,54 +696,46 @@
       O: () => `<ellipse cx="${MX}" cy="${MY+5}" rx="85" ry="95" fill="#0B0F31"/>`,
       CDNSTZ: () => {
         const w = 155, h = 38;
-        return `
-          <ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+        return `<ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
           <rect x="${MX-w+10}" y="${MY-8}" width="${(w-10)*2}" height="16" rx="4" fill="white" opacity="0.95"/>`;
       },
       GK: () => {
         const w = 160, h = 55;
-        return `
-          <ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+        return `<ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
           <rect x="${MX-w}" y="${MY-h}" width="${w*2}" height="30" rx="6" fill="white" opacity="0.95"/>
           <rect x="${MX-w+15}" y="${MY+h-28}" width="${w*2-30}" height="24" rx="6" fill="white" opacity="0.95"/>`;
       },
       Th: () => {
         const w = 140, h = 35;
-        return `
-          <ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+        return `<ellipse cx="${MX}" cy="${MY}" rx="${w}" ry="${h}" fill="#0B0F31"/>
           <rect x="${MX-w+5}" y="${MY-h}" width="${(w-5)*2}" height="25" rx="5" fill="white" opacity="0.95"/>
           <ellipse cx="${MX}" cy="${MY+h-8}" rx="50" ry="22" fill="#E8345A"/>`;
       },
       FV: () => {
         const w = 155, h = 30;
-        return `
-          <path d="M${MX-w} ${MY-5} Q${MX} ${MY-h-10} ${MX+w} ${MY-5}" stroke="#0B0F31" stroke-width="6" fill="none"/>
+        return `<path d="M${MX-w} ${MY-5} Q${MX} ${MY-h-10} ${MX+w} ${MY-5}" stroke="#0B0F31" stroke-width="6" fill="none"/>
           <ellipse cx="${MX}" cy="${MY+5}" rx="${w-10}" ry="${h-5}" fill="#0B0F31"/>
           <rect x="${MX-w+10}" y="${MY-h+15}" width="${(w-10)*2}" height="22" rx="4" fill="white" opacity="0.95"/>`;
       },
       L: () => {
         const w = 165, h = 80;
-        return `
-          <ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+        return `<ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
           <rect x="${MX-w}" y="${MY-h+5}" width="${w*2}" height="32" rx="6" fill="white" opacity="0.95"/>
           <rect x="${MX-w+15}" y="${MY+h-28}" width="${w*2-30}" height="24" rx="6" fill="white" opacity="0.95"/>
           <ellipse cx="${MX}" cy="${MY-h+40}" rx="45" ry="28" fill="#E8345A"/>`;
       },
       R: () => {
         const w = 120, h = 65;
-        return `
-          <ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+        return `<ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
           <rect x="${MX-w}" y="${MY-h+5}" width="${w*2}" height="28" rx="5" fill="white" opacity="0.95"/>`;
       },
       H: () => {
         const w = 160, h = 90;
-        return `
-          <ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
+        return `<ellipse cx="${MX}" cy="${MY+5}" rx="${w}" ry="${h}" fill="#0B0F31"/>
           <rect x="${MX-w}" y="${MY-h+5}" width="${w*2}" height="30" rx="6" fill="white" opacity="0.95"/>`;
       },
     };
 
-    // Volume-to-mouth for audio analysis (5 levels)
     const volumeMouths = [
       () => visemes.rest(),
       () => visemes.BMP(),
@@ -603,121 +744,243 @@
       () => visemes.AEI(),
     ];
 
-    // Letter-to-viseme for text mode
-    const letterToViseme = {
-      'a':'AEI','b':'BMP','c':'CDNSTZ','d':'CDNSTZ','e':'Ee','f':'FV',
-      'g':'GK','h':'H','i':'AEI','j':'CDNSTZ','k':'GK','l':'L',
-      'm':'BMP','n':'CDNSTZ','o':'O','p':'BMP','q':'UQW','r':'R',
-      's':'CDNSTZ','t':'CDNSTZ','u':'UQW','v':'FV','w':'UQW',
-      'x':'CDNSTZ','y':'CDNSTZ','z':'CDNSTZ',
-    };
-
-    function textToVisemes(text) {
-      const result = [];
-      const lower = text.toLowerCase();
-      let i = 0;
-      while (i < lower.length) {
-        if (i < lower.length - 1 && lower[i] === 't' && lower[i+1] === 'h') {
-          result.push({ viseme: 'Th', char: 'th' }); i += 2; continue;
-        }
-        const ch = lower[i];
-        if (letterToViseme[ch]) result.push({ viseme: letterToViseme[ch], char: ch });
-        else if (ch === ' ') result.push({ viseme: 'rest', char: ' ' });
-        i++;
-      }
-      return result;
-    }
-
     function setViseme(name) {
       const fn = visemes[name];
       if (fn) mouthGroup.innerHTML = fn();
     }
 
     // =============================================
-    // TEXT CHAT (API + TTS audio)
+    // MESSAGE RENDERING
     // =============================================
-    function addChatMsg(text, role) {
-      const div = document.createElement('div');
-      div.className = `chat-msg ${role}`;
-      div.textContent = text;
-      chatArea.appendChild(div);
-      chatArea.scrollTop = chatArea.scrollHeight;
+    function getTimeString() {
+      const now = new Date();
+      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    async function sendChat() {
-      const text = talkInput.value.trim();
-      if (!text || isSpeaking) return;
-      isSpeaking = true;
-      speakBtn.disabled = true;
-      speakBtn.textContent = '...';
-      talkInput.value = '';
+    function addMessage(text, role, audioBase64) {
+      const row = document.createElement('div');
+      row.className = `msg-row ${role}`;
 
-      addChatMsg(text, 'user');
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.textContent = text;
+      row.appendChild(bubble);
+
+      messagesArea.appendChild(row);
+
+      // Add meta row (time + optional play button) for toni messages
+      if (role === 'toni') {
+        const meta = document.createElement('div');
+        meta.className = 'msg-meta';
+
+        if (audioBase64) {
+          const playBtn = document.createElement('button');
+          playBtn.className = 'play-audio-btn';
+          playBtn.innerHTML = `
+            <svg class="progress-ring" viewBox="0 0 34 34"><circle cx="17" cy="17" r="15" stroke-dasharray="94.25" stroke-dashoffset="0"/></svg>
+            <svg class="icon icon-volume" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            <svg class="icon icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <svg class="icon icon-play" viewBox="0 0 24 24" style="display:none"><path d="M8 5v14l11-7z"/></svg>`;
+          playBtn._audioBase64 = audioBase64;
+          playBtn.onclick = () => togglePlayAudio(playBtn);
+          meta.appendChild(playBtn);
+        }
+
+        const time = document.createElement('span');
+        time.className = 'msg-time';
+        time.textContent = getTimeString();
+        meta.appendChild(time);
+
+        row.appendChild(meta);
+      } else {
+        const meta = document.createElement('div');
+        meta.className = 'msg-meta';
+        meta.style.justifyContent = 'flex-end';
+        const time = document.createElement('span');
+        time.className = 'msg-time';
+        time.textContent = getTimeString();
+        meta.appendChild(time);
+        row.appendChild(meta);
+      }
+
+      messagesArea.scrollTop = messagesArea.scrollHeight;
+      return row;
+    }
+
+    function showTypingIndicator() {
+      const row = document.createElement('div');
+      row.className = 'msg-row toni';
+      row.id = 'typing-indicator';
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+      row.appendChild(bubble);
+      messagesArea.appendChild(row);
+      messagesArea.scrollTop = messagesArea.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+      const el = document.getElementById('typing-indicator');
+      if (el) el.remove();
+    }
+
+    // =============================================
+    // PLAY AUDIO (per-message)
+    // =============================================
+    async function togglePlayAudio(btn) {
+      // If already playing this one, stop it
+      if (currentPlayingBtn === btn) {
+        stopCurrentAudio();
+        return;
+      }
+      // Stop any other playing audio
+      if (currentPlayingBtn) stopCurrentAudio();
+
+      if (!audioContext) audioContext = new AudioContext();
+
+      const raw = atob(btn._audioBase64);
+      const bytes = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+      const audioBuffer = await audioContext.decodeAudioData(bytes.buffer.slice(0));
+
+      if (!playbackAnalyser) {
+        playbackAnalyser = audioContext.createAnalyser();
+        playbackAnalyser.fftSize = 256;
+        playbackAnalyser.smoothingTimeConstant = 0.3;
+      }
+      if (!playbackGain) {
+        playbackGain = audioContext.createGain();
+        playbackGain.gain.value = 1.0;
+        playbackGain.connect(playbackAnalyser);
+        playbackAnalyser.connect(audioContext.destination);
+      }
+
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(playbackGain);
+
+      currentPlayingBtn = btn;
+      currentPlayingSource = source;
+      isPlayingAudio = true;
+
+      // Update button state
+      btn.classList.add('playing');
+      btn.querySelector('.icon-volume').style.display = 'none';
+      btn.querySelector('.icon-pause').style.display = 'block';
+      btn.querySelector('.icon-play').style.display = 'none';
+
+      // Start mouth sync
+      if (!animFrameId) startMouthSync();
+
+      // Animate progress ring
+      const duration = audioBuffer.duration;
+      const circle = btn.querySelector('.progress-ring circle');
+      const circumference = 94.25;
+      const startTime = audioContext.currentTime;
+      function updateProgress() {
+        if (currentPlayingBtn !== btn) return;
+        const elapsed = audioContext.currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        circle.style.strokeDashoffset = circumference * (1 - progress);
+        if (progress < 1) requestAnimationFrame(updateProgress);
+      }
+      updateProgress();
+
+      source.onended = () => {
+        if (currentPlayingBtn === btn) {
+          stopCurrentAudio();
+          // Show replay state
+          btn.querySelector('.icon-volume').style.display = 'none';
+          btn.querySelector('.icon-pause').style.display = 'none';
+          btn.querySelector('.icon-play').style.display = 'block';
+        }
+      };
+      source.start();
+    }
+
+    function stopCurrentAudio() {
+      if (currentPlayingSource) {
+        try { currentPlayingSource.stop(); } catch(e) {}
+        currentPlayingSource = null;
+      }
+      if (currentPlayingBtn) {
+        currentPlayingBtn.classList.remove('playing');
+        currentPlayingBtn.querySelector('.icon-volume').style.display = 'block';
+        currentPlayingBtn.querySelector('.icon-pause').style.display = 'none';
+        currentPlayingBtn.querySelector('.icon-play').style.display = 'none';
+        const circle = currentPlayingBtn.querySelector('.progress-ring circle');
+        circle.style.strokeDashoffset = '0';
+        currentPlayingBtn = null;
+      }
+      isPlayingAudio = false;
+      if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+      setViseme('rest');
+    }
+
+    // =============================================
+    // TEXT CHAT
+    // =============================================
+    async function sendMessage() {
+      const text = inputField.value.trim();
+      if (!text || isBusy) return;
+      doSend(text);
+    }
+
+    function sendQuickReply(chipEl) {
+      if (isBusy) return;
+      // Extract text without emoji
+      const text = chipEl.textContent.trim();
+      doSend(text);
+    }
+
+    async function doSend(text) {
+      isBusy = true;
+      sendBtn.disabled = true;
+      inputField.value = '';
+
+      // Hide quick replies after first message
+      quickReplies.style.display = 'none';
+
+      addMessage(text, 'user');
+      showTypingIndicator();
 
       try {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text, voiceKey: voiceSelect.value }),
+          body: JSON.stringify({ message: text, voiceKey: 'bella' }),
         });
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         const data = await res.json();
 
-        addChatMsg(data.response, 'toni');
+        removeTypingIndicator();
+        addMessage(data.response, 'toni', data.audio || null);
 
-        // Play TTS audio with mouth sync
-        if (data.audio) {
-          if (!audioContext) audioContext = new AudioContext();
-          const raw = atob(data.audio);
-          const bytes = new Uint8Array(raw.length);
-          for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
-          const audioBuffer = await audioContext.decodeAudioData(bytes.buffer);
-
-          if (!playbackAnalyser) {
-            playbackAnalyser = audioContext.createAnalyser();
-            playbackAnalyser.fftSize = 256;
-            playbackAnalyser.smoothingTimeConstant = 0.3;
+        // If user sent via voice, auto-play the response
+        if (inputMode === 'voice' && data.audio) {
+          const lastPlayBtn = messagesArea.querySelector('.msg-row.toni:last-child .play-audio-btn');
+          if (lastPlayBtn) {
+            setTimeout(() => togglePlayAudio(lastPlayBtn), 200);
           }
-          if (!playbackGain) {
-            playbackGain = audioContext.createGain();
-            playbackGain.gain.value = 1.0;
-            playbackGain.connect(playbackAnalyser);
-            playbackAnalyser.connect(audioContext.destination);
-          }
-
-          const source = audioContext.createBufferSource();
-          source.buffer = audioBuffer;
-          source.connect(playbackGain);
-          isPlayingAudio = true;
-          if (!animFrameId) startMouthSync();
-          source.onended = () => {
-            isPlayingAudio = false;
-            finishSpeaking();
-          };
-          source.start();
         }
       } catch (err) {
-        addChatMsg('Oops, something went wrong!', 'toni');
-        statusText.textContent = err.message;
-        finishSpeaking();
+        removeTypingIndicator();
+        addMessage('Oops, da ist etwas schiefgelaufen. Bitte versuche es nochmal!', 'toni');
       }
+
+      isBusy = false;
+      sendBtn.disabled = !inputField.value.trim();
     }
 
-    function finishSpeaking() {
-      setViseme('rest');
-      statusText.textContent = '';
-      isSpeaking = false;
-      speakBtn.disabled = false;
-      speakBtn.textContent = 'Send';
-      setExpression(currentExpression);
-    }
-
-    talkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendChat(); });
+    inputField.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+    inputField.addEventListener('input', () => {
+      sendBtn.disabled = !inputField.value.trim();
+    });
 
     // =============================================
-    // ELEVENLABS CONVERSATIONAL AI
+    // VOICE INPUT (WebSocket conversation)
     // =============================================
-    async function toggleConversation() {
+    async function toggleVoice() {
       if (isConversationActive) {
         stopConversation();
       } else {
@@ -726,42 +989,33 @@
     }
 
     async function startConversation() {
-      convoBtn.disabled = true;
-      statusText.textContent = 'Connecting...';
+      if (micBtn.disabled) return;
+      micBtn.disabled = true;
 
       try {
-        // Get signed URL from our backend
-        const voiceKey = voiceSelect.value || 'bella';
         const lang = window.appContext._lang || 'en';
-        const res = await fetch(`/api/conversation-url?voice=${voiceKey}&lang=${lang}`);
+        const res = await fetch(`/api/conversation-url?voice=bella&lang=${lang}`);
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         const { signedUrl } = await res.json();
 
-        // Set up audio context (default sample rate for playback, mic will be resampled)
         audioContext = new AudioContext();
 
-        // Get mic access
         micStream = await navigator.mediaDevices.getUserMedia({
           audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
         });
 
-        // Connect WebSocket
         ws = new WebSocket(signedUrl);
         ws.binaryType = 'arraybuffer';
 
         ws.onopen = () => {
           isConversationActive = true;
-          convoBtn.disabled = false;
-          convoBtn.className = 'convo-btn stop';
-          convoBtn.innerHTML = '<span class="stop-icon"></span>';
-          convoLabel.textContent = 'Listening...';
-          statusText.textContent = '';
-          console.log('WebSocket connected');
-
-          // Start sending mic audio
+          inputMode = 'voice';
+          micBtn.disabled = false;
+          micBtn.classList.add('recording');
+          inputField.placeholder = 'Listening... tap mic to stop';
+          inputField.disabled = true;
           startMicCapture();
 
-          // Keep-alive ping every 10s
           ws._pingInterval = setInterval(() => {
             if (ws && ws.readyState === WebSocket.OPEN) {
               ws.send(JSON.stringify({ type: 'ping' }));
@@ -771,112 +1025,83 @@
 
         ws.onmessage = (event) => {
           if (typeof event.data === 'string') {
-            const msg = JSON.parse(event.data);
-            handleWSMessage(msg);
+            handleWSMessage(JSON.parse(event.data));
           } else {
-            // Binary audio data from agent
             handleAudioChunk(event.data);
           }
         };
 
-        ws.onerror = (err) => {
-          console.error('WebSocket error:', err);
-          statusText.textContent = 'Connection error';
-          stopConversation();
-        };
-
-        ws.onclose = (event) => {
-          console.log('WebSocket closed:', event.code, event.reason);
+        ws.onerror = () => stopConversation();
+        ws.onclose = () => {
           if (ws?._pingInterval) clearInterval(ws._pingInterval);
-          if (isConversationActive) {
-            statusText.textContent = `Connection closed (${event.code})`;
-            stopConversation();
-          }
+          if (isConversationActive) stopConversation();
         };
 
       } catch (err) {
-        console.error('Failed to start conversation:', err);
+        console.error('Failed to start voice:', err);
+        micBtn.disabled = false;
         if (err.name === 'NotAllowedError') {
-          statusText.textContent = 'Mic access denied — allow microphone or open in a browser tab';
-        } else {
-          statusText.textContent = `Error: ${err.message}`;
+          addMessage('Mikrofonzugriff wurde verweigert. Bitte erlaube den Zugriff in den Einstellungen.', 'toni');
         }
-        convoBtn.disabled = false;
-        convoBtn.className = 'convo-btn start';
-        convoBtn.innerHTML = '<svg class="mic-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>';
-        convoLabel.textContent = 'Talk to Toni';
       }
     }
 
     function stopConversation() {
       isConversationActive = false;
+      inputMode = 'text';
 
       if (ws) { if (ws._pingInterval) clearInterval(ws._pingInterval); ws.close(); ws = null; }
       if (micProcessor) { micProcessor.disconnect(); micProcessor = null; }
       if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
       if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
 
-      playbackQueue = [];
-      isPlaying = false;
+      pcmBuffer = [];
+      isPlayingAudio = false;
 
-      convoBtn.disabled = false;
-      convoBtn.className = 'convo-btn start';
-      convoBtn.innerHTML = '<svg class="mic-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>';
-      convoLabel.textContent = 'Talk to Toni';
-      statusText.textContent = '';
-      setExpression(currentExpression);
+      micBtn.disabled = false;
+      micBtn.classList.remove('recording');
+      inputField.placeholder = 'Type your message...';
+      inputField.disabled = false;
+      setViseme('rest');
     }
 
     function handleWSMessage(msg) {
-      console.log('WS message:', msg.type, msg);
       switch (msg.type) {
         case 'conversation_initiation_metadata':
           agentAudioFormat = msg.conversation_initiation_metadata_event?.agent_output_audio_format || 'pcm_16000';
-          console.log('Agent audio format:', agentAudioFormat);
-          statusText.textContent = 'Connected! Start speaking...';
           break;
         case 'agent_response':
-          statusText.textContent = `Toni: "${msg.agent_response_event?.agent_response || ''}"`;
+          const agentText = msg.agent_response_event?.agent_response || '';
+          if (agentText) addMessage(agentText, 'toni');
           break;
         case 'user_transcript':
-          statusText.textContent = `You: "${msg.user_transcription_event?.user_transcript || ''}"`;
+          const userText = msg.user_transcription_event?.user_transcript || '';
+          if (userText) addMessage(userText, 'user');
           break;
         case 'audio':
-          if (msg.audio_event?.audio_base_64) {
-            handleAudioChunk(msg.audio_event.audio_base_64);
-          }
+          if (msg.audio_event?.audio_base_64) handleStreamAudioChunk(msg.audio_event.audio_base_64);
           break;
         case 'ping':
           if (ws && ws.readyState === WebSocket.OPEN) {
-            const eventId = msg.ping_event?.event_id;
-            console.log('Responding to ping with event_id:', eventId);
-            ws.send(JSON.stringify({ type: 'pong', event_id: eventId }));
+            ws.send(JSON.stringify({ type: 'pong', event_id: msg.ping_event?.event_id }));
           }
           break;
         case 'interruption':
-          // User interrupted — stop playback
           clearPlaybackQueue();
           break;
       }
     }
 
-    let agentAudioFormat = 'pcm_16000';
-
-    // ---- Mic capture → downsample to 16kHz → send PCM to WebSocket ----
+    // ---- Mic capture ----
     function startMicCapture() {
       const source = audioContext.createMediaStreamSource(micStream);
       const inputSampleRate = audioContext.sampleRate;
-      const targetSampleRate = 16000;
-      const ratio = inputSampleRate / targetSampleRate;
+      const ratio = inputSampleRate / 16000;
 
       micProcessor = audioContext.createScriptProcessor(4096, 1, 1);
-
-      let micChunkCount = 0;
       micProcessor.onaudioprocess = (e) => {
         if (!ws || ws.readyState !== WebSocket.OPEN) return;
         const input = e.inputBuffer.getChannelData(0);
-
-        // Downsample from native rate (e.g. 48000) to 16000
         const outputLength = Math.floor(input.length / ratio);
         const pcm = new Int16Array(outputLength);
         for (let i = 0; i < outputLength; i++) {
@@ -884,17 +1109,12 @@
           const s = Math.max(-1, Math.min(1, input[srcIndex]));
           pcm[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
         }
-
         const bytes = new Uint8Array(pcm.buffer);
         let binary = '';
         for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
         ws.send(JSON.stringify({ user_audio_chunk: btoa(binary) }));
-        micChunkCount++;
-        if (micChunkCount % 50 === 1) console.log('Mic sending chunk #' + micChunkCount, 'samples:', outputLength);
       };
 
-      // Connect through a silent gain node (ScriptProcessor must be connected
-      // to destination to work, but we don't want mic audio played back)
       const silentGain = audioContext.createGain();
       silentGain.gain.value = 0;
       source.connect(micProcessor);
@@ -902,28 +1122,17 @@
       silentGain.connect(audioContext.destination);
     }
 
-    // ---- Play agent audio (PCM 16-bit 16kHz) + mouth sync ----
-    let pcmBuffer = [];    // accumulate PCM samples
-    let isPlayingAudio = false;
-    let playbackGain = null;
-    let playbackAnalyser = null;
-
-    function handleAudioChunk(base64) {
-      // Decode base64 → Int16 PCM
+    // ---- Stream audio playback (for voice conversation) ----
+    function handleStreamAudioChunk(base64) {
       const raw = atob(base64);
       const bytes = new Uint8Array(raw.length);
       for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
       const int16 = new Int16Array(bytes.buffer);
-
-      // Convert Int16 → Float32
       const float32 = new Float32Array(int16.length);
-      for (let i = 0; i < int16.length; i++) {
-        float32[i] = int16[i] / 32768;
-      }
+      for (let i = 0; i < int16.length; i++) float32[i] = int16[i] / 32768;
 
       pcmBuffer.push(float32);
 
-      // Start playback if not already playing
       if (!isPlayingAudio) {
         isPlayingAudio = true;
         schedulePlayback();
@@ -934,28 +1143,24 @@
     function schedulePlayback() {
       if (pcmBuffer.length === 0) {
         isPlayingAudio = false;
-        // Small delay before returning to rest (more chunks might arrive)
         setTimeout(() => {
           if (!isPlayingAudio) {
             if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
             setViseme('rest');
-            if (isConversationActive) statusText.textContent = 'Listening...';
           }
         }, 300);
         return;
       }
 
       const samples = pcmBuffer.shift();
-      const sampleRate = 16000;
+      if (!audioContext) audioContext = new AudioContext();
 
-      // Create AudioBuffer from PCM float32
-      const audioBuffer = audioContext.createBuffer(1, samples.length, sampleRate);
+      const audioBuffer = audioContext.createBuffer(1, samples.length, 16000);
       audioBuffer.getChannelData(0).set(samples);
 
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
 
-      // Set up analyser for mouth sync
       if (!playbackAnalyser) {
         playbackAnalyser = audioContext.createAnalyser();
         playbackAnalyser.fftSize = 256;
@@ -982,27 +1187,18 @@
 
     function startMouthSync() {
       const dataArray = new Uint8Array(playbackAnalyser.frequencyBinCount);
-
       function sync() {
         if (!isPlayingAudio && pcmBuffer.length === 0) {
           setViseme('rest');
           animFrameId = null;
           return;
         }
-
         playbackAnalyser.getByteFrequencyData(dataArray);
         let sum = 0;
         const start = 1, end = Math.min(30, dataArray.length);
         for (let i = start; i < end; i++) sum += dataArray[i];
         const avg = sum / (end - start);
-
-        let level;
-        if (avg < 5) level = 0;
-        else if (avg < 25) level = 1;
-        else if (avg < 55) level = 2;
-        else if (avg < 100) level = 3;
-        else level = 4;
-
+        let level = avg < 5 ? 0 : avg < 25 ? 1 : avg < 55 ? 2 : avg < 100 ? 3 : 4;
         mouthGroup.innerHTML = volumeMouths[level]();
         animFrameId = requestAnimationFrame(sync);
       }
@@ -1027,12 +1223,9 @@
       const defaults = id === 'left' ? { cx: 940, cy: 1130, r: 95 } : { cx: 1438, cy: 1130, r: 95 };
       g.innerHTML = '';
       g.style.display = props.hidden ? 'none' : '';
-
       if (props.type === 'normal' || !props.type) {
         const cx = props.cx ?? defaults.cx, cy = props.cy ?? defaults.cy, r = props.r ?? defaults.r;
-        g.innerHTML = `
-          <circle cx="${cx}" cy="${cy}" r="${r}" fill="${props.fill ?? '#0B0F31'}"/>
-          <circle cx="${cx + (props.hlX ?? 30)}" cy="${cy + (props.hlY ?? -35)}" r="${props.hlR ?? 28}" fill="white"/>`;
+        g.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${props.fill ?? '#0B0F31'}"/><circle cx="${cx + (props.hlX ?? 30)}" cy="${cy + (props.hlY ?? -35)}" r="${props.hlR ?? 28}" fill="white"/>`;
       } else if (props.type === 'closed-happy') {
         const cx = id === 'left' ? 915 : 1413;
         g.innerHTML = `<path d="M${cx-90} 1150 Q${cx} 1040 ${cx+90} 1150" stroke="#0B0F31" stroke-width="50" stroke-linecap="round" fill="none"/>`;
@@ -1041,9 +1234,7 @@
         g.innerHTML = `<line x1="${cx-85}" y1="1130" x2="${cx+85}" y2="1130" stroke="#0B0F31" stroke-width="50" stroke-linecap="round"/>`;
       } else if (props.type === 'x') {
         const cx = id === 'left' ? 915 : 1413, cy = 1116;
-        g.innerHTML = `
-          <line x1="${cx-65}" y1="${cy-65}" x2="${cx+65}" y2="${cy+65}" stroke="#0B0F31" stroke-width="50" stroke-linecap="round"/>
-          <line x1="${cx+65}" y1="${cy-65}" x2="${cx-65}" y2="${cy+65}" stroke="#0B0F31" stroke-width="50" stroke-linecap="round"/>`;
+        g.innerHTML = `<line x1="${cx-65}" y1="${cy-65}" x2="${cx+65}" y2="${cy+65}" stroke="#0B0F31" stroke-width="50" stroke-linecap="round"/><line x1="${cx+65}" y1="${cy-65}" x2="${cx-65}" y2="${cy+65}" stroke="#0B0F31" stroke-width="50" stroke-linecap="round"/>`;
       } else if (props.type === 'heart') {
         const cx = id === 'left' ? 915 : 1413, cy = 1116, s = props.scale ?? 1;
         g.innerHTML = `<path d="M${cx} ${cy+50*s} L${cx-70*s} ${cy-10*s} A${50*s} ${50*s} 0 0 1 ${cx} ${cy-55*s} A${50*s} ${50*s} 0 0 1 ${cx+70*s} ${cy-10*s} Z" fill="#E8345A"/>`;
@@ -1068,9 +1259,7 @@
     function scheduleBlink() {
       if (blinkTimeout) clearTimeout(blinkTimeout);
       blinkTimeout = setTimeout(() => {
-        if (NO_BLINK.includes(currentExpression) && !isSpeaking && !isConversationActive) {
-          scheduleBlink(); return;
-        }
+        if (NO_BLINK.includes(currentExpression)) { scheduleBlink(); return; }
         doBlink();
       }, 2200 + Math.random() * 2000);
     }
@@ -1079,11 +1268,9 @@
       const savedL = leftEye.innerHTML, savedR = rightEye.innerHTML;
       const savedLRy = leftEyeWhite.getAttribute('ry'), savedRRy = rightEyeWhite.getAttribute('ry');
       const savedLCy = leftEyeWhite.getAttribute('cy'), savedRCy = rightEyeWhite.getAttribute('cy');
-
       leftEyeWhite.setAttribute('ry', '30'); rightEyeWhite.setAttribute('ry', '30');
       leftEyeWhite.setAttribute('cy', '1140'); rightEyeWhite.setAttribute('cy', '1140');
       leftEye.innerHTML = ''; rightEye.innerHTML = '';
-
       setTimeout(() => {
         leftEyeWhite.setAttribute('ry', savedLRy); rightEyeWhite.setAttribute('ry', savedRRy);
         leftEyeWhite.setAttribute('cy', savedLCy); rightEyeWhite.setAttribute('cy', savedRCy);
@@ -1096,11 +1283,6 @@
     // EXPRESSIONS
     // =============================================
     function resetFace() {
-      if (speakTimeout) { clearTimeout(speakTimeout); speakTimeout = null; }
-      if (animFrameId && !isConversationActive) { cancelAnimationFrame(animFrameId); animFrameId = null; }
-      isSpeaking = false;
-      speakBtn.disabled = false;
-      speakBtn.textContent = 'Send';
       setEyeWhite('left', {});
       setEyeWhite('right', {});
       setEye('left', { type: 'normal' });
@@ -1108,8 +1290,7 @@
       setBrow('left', { hidden: true });
       setBrow('right', { hidden: true });
       setViseme('rest');
-      if (!isConversationActive) statusText.textContent = '';
-      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.expression-chips button').forEach(b => b.classList.remove('active'));
     }
 
     function setExpression(expr) {
@@ -1119,87 +1300,68 @@
       if (btn) btn.classList.add('active');
 
       switch (expr) {
-        case 'happy':
-          setViseme('rest');
-          break;
+        case 'happy': setViseme('rest'); break;
         case 'excited':
-          setEye('left', { type: 'closed-happy' });
-          setEye('right', { type: 'closed-happy' });
-          setEyeWhite('left', { hidden: true });
-          setEyeWhite('right', { hidden: true });
-          mouthGroup.innerHTML = visemes.AEI();
-          break;
+          setEye('left', { type: 'closed-happy' }); setEye('right', { type: 'closed-happy' });
+          setEyeWhite('left', { hidden: true }); setEyeWhite('right', { hidden: true });
+          mouthGroup.innerHTML = visemes.AEI(); break;
         case 'surprised':
-          setEyeWhite('left', { ry: 280 });
-          setEyeWhite('right', { ry: 280 });
-          setEye('left', { type: 'normal', r: 80, cy: 1120, hlR: 24 });
-          setEye('right', { type: 'normal', r: 80, cy: 1120, hlR: 24 });
-          setBrow('left', { d: 'M810 815 Q915 770 1020 815' });
-          setBrow('right', { d: 'M1308 815 Q1413 770 1518 815' });
-          setViseme('O');
-          break;
+          setEyeWhite('left', { ry: 280 }); setEyeWhite('right', { ry: 280 });
+          setEye('left', { type: 'normal', r: 80, cy: 1120, hlR: 24 }); setEye('right', { type: 'normal', r: 80, cy: 1120, hlR: 24 });
+          setBrow('left', { d: 'M810 815 Q915 770 1020 815' }); setBrow('right', { d: 'M1308 815 Q1413 770 1518 815' });
+          setViseme('O'); break;
         case 'sad':
-          setEyeWhite('left', { ry: 220, cy: 1130 });
-          setEyeWhite('right', { ry: 220, cy: 1130 });
-          setEye('left', { type: 'normal', cy: 1150, r: 85, hlY: -28 });
-          setEye('right', { type: 'normal', cy: 1150, r: 85, hlY: -28 });
-          setBrow('left', { d: 'M810 855 Q910 810 1020 870' });
-          setBrow('right', { d: 'M1308 870 Q1418 810 1518 855' });
-          mouthGroup.innerHTML = `<path d="M${MX-180} ${MY+40} Q${MX} ${MY-50} ${MX+180} ${MY+40}" stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`;
-          break;
+          setEyeWhite('left', { ry: 220, cy: 1130 }); setEyeWhite('right', { ry: 220, cy: 1130 });
+          setEye('left', { type: 'normal', cy: 1150, r: 85, hlY: -28 }); setEye('right', { type: 'normal', cy: 1150, r: 85, hlY: -28 });
+          setBrow('left', { d: 'M810 855 Q910 810 1020 870' }); setBrow('right', { d: 'M1308 870 Q1418 810 1518 855' });
+          mouthGroup.innerHTML = `<path d="M${MX-180} ${MY+40} Q${MX} ${MY-50} ${MX+180} ${MY+40}" stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`; break;
         case 'angry':
-          setEyeWhite('left', { ry: 200, cy: 1130 });
-          setEyeWhite('right', { ry: 200, cy: 1130 });
-          setEye('left', { type: 'normal', cy: 1140, r: 90 });
-          setEye('right', { type: 'normal', cy: 1140, r: 90 });
-          setBrow('left', { d: 'M790 830 L1040 895' });
-          setBrow('right', { d: 'M1288 895 L1538 830' });
-          setViseme('BMP');
-          break;
+          setEyeWhite('left', { ry: 200, cy: 1130 }); setEyeWhite('right', { ry: 200, cy: 1130 });
+          setEye('left', { type: 'normal', cy: 1140, r: 90 }); setEye('right', { type: 'normal', cy: 1140, r: 90 });
+          setBrow('left', { d: 'M790 830 L1040 895' }); setBrow('right', { d: 'M1288 895 L1538 830' });
+          setViseme('BMP'); break;
         case 'love':
-          setEye('left', { type: 'heart', scale: 1.2 });
-          setEye('right', { type: 'heart', scale: 1.2 });
-          mouthGroup.innerHTML = `<path d="M${MX-200} ${MY} Q${MX} ${MY+110} ${MX+200} ${MY}" stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`;
-          break;
+          setEye('left', { type: 'heart', scale: 1.2 }); setEye('right', { type: 'heart', scale: 1.2 });
+          mouthGroup.innerHTML = `<path d="M${MX-200} ${MY} Q${MX} ${MY+110} ${MX+200} ${MY}" stroke="#0B0F31" stroke-width="46" stroke-linecap="round" fill="none"/>`; break;
         case 'sleepy':
-          setEye('left', { type: 'closed-sleepy' });
-          setEye('right', { type: 'closed-sleepy' });
-          setEyeWhite('left', { ry: 160, cy: 1130 });
-          setEyeWhite('right', { ry: 160, cy: 1130 });
-          mouthGroup.innerHTML = `<path d="M${MX-80} ${MY} Q${MX} ${MY+40} ${MX+80} ${MY}" stroke="#0B0F31" stroke-width="40" stroke-linecap="round" fill="none"/>`;
-          break;
+          setEye('left', { type: 'closed-sleepy' }); setEye('right', { type: 'closed-sleepy' });
+          setEyeWhite('left', { ry: 160, cy: 1130 }); setEyeWhite('right', { ry: 160, cy: 1130 });
+          mouthGroup.innerHTML = `<path d="M${MX-80} ${MY} Q${MX} ${MY+40} ${MX+80} ${MY}" stroke="#0B0F31" stroke-width="40" stroke-linecap="round" fill="none"/>`; break;
         case 'skeptical':
           setEyeWhite('right', { ry: 170, cy: 1140 });
-          setEye('left', { type: 'normal', cx: 950, cy: 1130 });
-          setEye('right', { type: 'normal', cx: 1445, cy: 1145, r: 80 });
+          setEye('left', { type: 'normal', cx: 950, cy: 1130 }); setEye('right', { type: 'normal', cx: 1445, cy: 1145, r: 80 });
           setBrow('left', { d: 'M810 800 Q915 770 1020 800' });
-          mouthGroup.innerHTML = `<path d="M${MX-170} ${MY+10} Q${MX-50} ${MY+50} ${MX+170} ${MY-20}" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none"/>`;
-          break;
+          mouthGroup.innerHTML = `<path d="M${MX-170} ${MY+10} Q${MX-50} ${MY+50} ${MX+170} ${MY-20}" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none"/>`; break;
         case 'cheeky':
-          setEye('left', { type: 'normal', cx: 935, cy: 1120 });
-          setEye('right', { type: 'wink' });
+          setEye('left', { type: 'normal', cx: 935, cy: 1120 }); setEye('right', { type: 'wink' });
           setEyeWhite('right', { ry: 170, cy: 1130 });
-          mouthGroup.innerHTML = visemes.AEI();
-          break;
+          mouthGroup.innerHTML = visemes.AEI(); break;
         case 'dead':
-          setEye('left', { type: 'x' });
-          setEye('right', { type: 'x' });
-          setEyeWhite('left', { hidden: true });
-          setEyeWhite('right', { hidden: true });
-          mouthGroup.innerHTML = `<path d="M${MX-170} ${MY} Q${MX-80} ${MY-30} ${MX} ${MY+10} Q${MX+80} ${MY+40} ${MX+170} ${MY-10}" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none"/>`;
-          break;
+          setEye('left', { type: 'x' }); setEye('right', { type: 'x' });
+          setEyeWhite('left', { hidden: true }); setEyeWhite('right', { hidden: true });
+          mouthGroup.innerHTML = `<path d="M${MX-170} ${MY} Q${MX-80} ${MY-30} ${MX} ${MY+10} Q${MX+80} ${MY+40} ${MX+170} ${MY-10}" stroke="#0B0F31" stroke-width="44" stroke-linecap="round" fill="none"/>`; break;
         case 'lookaway':
-          setEye('left', { type: 'normal', cx: 870, cy: 1110, hlX: 25, hlY: -30 });
-          setEye('right', { type: 'normal', cx: 1370, cy: 1110, hlX: 25, hlY: -30 });
-          mouthGroup.innerHTML = `<path d="M${MX-100} ${MY} Q${MX} ${MY+40} ${MX+100} ${MY}" stroke="#0B0F31" stroke-width="42" stroke-linecap="round" fill="none"/>`;
-          break;
+          setEye('left', { type: 'normal', cx: 870, cy: 1110, hlX: 25, hlY: -30 }); setEye('right', { type: 'normal', cx: 1370, cy: 1110, hlX: 25, hlY: -30 });
+          mouthGroup.innerHTML = `<path d="M${MX-100} ${MY} Q${MX} ${MY+40} ${MX+100} ${MY}" stroke="#0B0F31" stroke-width="42" stroke-linecap="round" fill="none"/>`; break;
       }
       scheduleBlink();
     }
 
-    // Init
+    // =============================================
+    // DEBUG PANEL
+    // =============================================
+    function toggleDebugPanel() {
+      document.getElementById('debug-panel').classList.toggle('open');
+    }
+
+    // =============================================
+    // INIT
+    // =============================================
     setExpression('happy');
     scheduleBlink();
+
+    // Welcome message from Toni
+    addMessage('Hi there! I\'m here to help you report any issues you\'re experiencing. What seems to be not working in the app?', 'toni');
   </script>
 </body>
 </html>
