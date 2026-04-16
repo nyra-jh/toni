@@ -324,6 +324,26 @@
       line-height: 1;
     }
 
+    /* ── Follow-up Chips (in chat) ── */
+    .follow-up-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-s);
+      padding: var(--space-xs) 0;
+      align-self: flex-start;
+    }
+    .chip.follow-up {
+      background: var(--surface-container);
+      border-color: var(--primary-300);
+      color: var(--primary-500);
+      font-weight: var(--weight-medium);
+    }
+    .chip.follow-up:hover {
+      background: var(--primary-50);
+      border-color: var(--primary-500);
+      color: var(--primary-700);
+    }
+
     /* ── Input Bar ── */
     .input-bar {
       display: flex;
@@ -919,6 +939,37 @@
     }
 
     // =============================================
+    // DYNAMIC FOLLOW-UP CHIPS
+    // =============================================
+    function removeFollowUpChips() {
+      const existing = document.getElementById('follow-up-chips');
+      if (existing) existing.remove();
+    }
+
+    function showFollowUpChips(chips) {
+      removeFollowUpChips();
+      if (!chips || chips.length === 0) return;
+
+      const container = document.createElement('div');
+      container.id = 'follow-up-chips';
+      container.className = 'follow-up-chips';
+
+      chips.forEach(text => {
+        const btn = document.createElement('button');
+        btn.className = 'chip follow-up';
+        btn.textContent = text;
+        btn.onclick = () => {
+          removeFollowUpChips();
+          doSend(text);
+        };
+        container.appendChild(btn);
+      });
+
+      messagesArea.appendChild(container);
+      messagesArea.scrollTop = messagesArea.scrollHeight;
+    }
+
+    // =============================================
     // TEXT CHAT
     // =============================================
     async function sendMessage() {
@@ -939,8 +990,9 @@
       sendBtn.disabled = true;
       inputField.value = '';
 
-      // Hide quick replies after first message
+      // Hide initial quick replies and any follow-up chips
       quickReplies.style.display = 'none';
+      removeFollowUpChips();
 
       addMessage(text, 'user');
       showTypingIndicator();
@@ -956,6 +1008,11 @@
 
         removeTypingIndicator();
         addMessage(data.response, 'toni', data.audio || null);
+
+        // Show follow-up chips if provided
+        if (data.followUps && data.followUps.length > 0) {
+          showFollowUpChips(data.followUps);
+        }
 
         // If user sent via voice, auto-play the response
         if (inputMode === 'voice' && data.audio) {

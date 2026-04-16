@@ -28,62 +28,199 @@ const VOICES = {
 const AGENT_ID = "agent_4601kpanrrfyf8avkgzm4qj0xkmf";
 
 // =============================================
-// FAQ KNOWLEDGE BASE
+// KNOWLEDGE BASE — Troubleshooting & FAQ
 // =============================================
+// Each entry has: q (keywords), a (response), followUps (suggested next chips)
 const FAQ_ENTRIES = [
-  // Website FAQ
-  { q: "was ist myreha", a: "myReha ist eine zertifizierte Medizin-App zum Trainieren von Gedächtnis, Sprache und Aufmerksamkeit. Du bekommst einen persönlichen Trainingsplan, der sich automatisch an dich anpasst!" },
-  { q: "was ist besonders an myreha", a: "myReha bietet qualitativ hochwertige, wissenschaftlich fundierte Neuro-Reha — überall verfügbar! Die App wurde von Experten entwickelt und passt sich intelligent an deinen Fortschritt an." },
-  { q: "welche bereiche", a: "myReha deckt alle Sprach- und Kognitionstherapie-Bereiche ab: Aussprache, Lesen, Schreiben, Sprachverständnis, Gedächtnis, logisches Denken, Planung, Rechnen, Aufmerksamkeit und Wahrnehmung." },
-  { q: "welche erkrankungen", a: "myReha kann bei Rehabilitation nach Schlaganfällen, Hirnblutungen, Multipler Sklerose, Morbus Parkinson, Schädel-Hirn-Trauma und anderen neurologischen Erkrankungen helfen." },
-  { q: "für wen geeignet", a: "myReha ist für Menschen mit Sprachstörungen wie Aphasie oder kognitiven Defiziten nach neurologischen Erkrankungen geeignet — unabhängig vom Schweregrad!" },
-  { q: "medizinprodukt zertifiziert ce", a: "Ja! myReha hat ein CE-Kennzeichen. Das bedeutet, dass alle Sicherheits- und Gesundheitsanforderungen eingehalten werden und strenge medizinische und Datenschutzprüfungen bestanden wurden." },
-  { q: "vorteile vergleich andere apps", a: "myReha ist die einzige Lösung mit über fünfundsechzigtausend Aufgaben und künstlicher Intelligenz für personalisierte Trainingspläne — und das als zertifiziertes Medizinprodukt!" },
-  { q: "medizinische inhalte woher", a: "Die Inhalte wurden von einem interdisziplinären Team aus Medizin, Logopädie, Ergotherapie und Neuropsychologie nach Gold-Standard-Methoden entwickelt." },
-  { q: "wer steckt dahinter gegründet", a: "myReha wurde von Dr. Philipp Schöllauf gegründet, zusammen mit einem Team aus Therapeuten und Ärzten, in Zusammenarbeit mit der Neurologischen Abteilung einer Klinik in Wien und Experten der Medizinischen Universität Wien." },
-  { q: "wie bekomme ich die app download", a: "Du kannst myReha im Apple App Store und im Google Play Store herunterladen — einfach nach 'myReha' suchen!" },
-  { q: "wie installiere ich", a: "Lade die App aus dem App Store herunter, installiere sie und klicke auf 'Neuen Zugang erstellen'. Dann einfach der Registrierung folgen!" },
-  { q: "geräteanforderungen geräte kompatibel", a: "iPhones und iPads brauchen mindestens iOS sechzehn, Android-Geräte mindestens Android sechs." },
-  { q: "wie wird die app angewendet", a: "Du kannst myReha auf deinem Smartphone oder Tablet nutzen — zeit- und ortsunabhängig, so oft du möchtest!" },
-  { q: "wie lange nutzen wie oft", a: "Wir empfehlen mindestens eine dreimonatige Rehaphase mit mindestens vier Stunden pro Woche. Langfristige Nutzung ist sehr sinnvoll!" },
-  { q: "welche übungen muss ich machen therapieplan", a: "Du bekommst einen persönlichen Therapieplan, der sich automatisch an deinen Fortschritt anpasst. Er basiert auf deiner Selbsteinschätzung oder den Empfehlungen deines Therapeuten." },
-  { q: "übungen zugeschnitten angepasst", a: "Die App lernt mit dir mit! Sie misst deine Leistung in jeder Übung und bietet dir fortlaufend passende, angepasste Übungen." },
-  { q: "übungsplan anpassen", a: "Der Plan passt sich automatisch an deinen Fortschritt an. Du kannst aber auch manuell Anpassungen in den App-Einstellungen vornehmen." },
-  { q: "angehörigen hilfe brauche ich jemanden", a: "Nein, du kannst myReha ganz selbstständig und ohne Hilfe verwenden! Die App ist so gestaltet, dass alles verständlich ist." },
-  { q: "schlaganfall verwenden", a: "Ja, die App wurde in intensiver Zusammenarbeit mit Schlaganfallpatienten entwickelt und ist speziell auf ihre Bedürfnisse angepasst!" },
-  { q: "ohne therapeuten arzt alleine", a: "Ja! Du kannst hochwertige Reha ganz selbstständig machen — von zu Hause aus oder sogar im Urlaub." },
-  { q: "praxis therapeuten version", a: "Ja! Es gibt eine Praxis-Version für Therapeuten mit dem kompletten Übungskatalog aus über fünfundsechzigtausend Aufgaben und einem Fortschritts-Dashboard." },
-  { q: "klinik zuhause weitermachen", a: "Ja! Du kannst dich mit deinen Klinik-Zugangsdaten anmelden oder dich neu auf deinem privaten Gerät registrieren." },
-  { q: "therapiestunde gemeinsam therapeut", a: "Ja! myReha ist eine großartige Ergänzung zur Therapiestunde. Dein Therapieteam kann auch deine Fortschritte analysieren." },
-  { q: "kosten kostenpflichtig preis", a: "myReha bietet Premium-Abos: neunundsechzig Euro neunundneunzig pro Monat, dreiundsechzig Euro dreiunddreißig bei drei Monaten oder achtundfünfzig Euro dreiunddreißig bei sechs Monaten. Viele Krankenkassen übernehmen die Kosten!" },
-  { q: "krankenkasse übernehmen versicherung", a: "Ja! Zahlreiche Krankenkassen übernehmen die Kosten für myReha. Bei der Registrierung werden deine Angaben geprüft." },
-  { q: "testphase kostenlos testen", a: "Ja! Nach dem Download kannst du eine limitierte Basis-Version ganz ohne Zahlungsdaten und Kosten nutzen." },
-  { q: "premium abo vorteile", a: "Das Premium-Abo bietet dir einen individuellen Therapieplan, Zugang zu über fünfundsechzigtausend Aufgaben und Echtzeit-Erfolgskontrolle. Du kannst es in den App-Einstellungen erwerben." },
-  { q: "welches abo nehmen", a: "Zum Schnuppern eignet sich das Einmonats-Abo. Für eine richtige Reha empfehle ich die drei- oder sechsmonatigen Abos — die sind auch günstiger pro Monat!" },
-  { q: "abo kündigen", a: "Ja, du kannst jederzeit einfach und schnell kündigen — über die Einstellungen deines Geräts, ganz ohne Probleme!" },
-  { q: "rechnung bezahlen", a: "Ja! Bei Problemen kannst du auch direkt an support@nyra.health schreiben. Rechnungen kommen vom App Store-Anbieter und sind über deine Geräte-Einstellungen abrufbar." },
-  { q: "daten sicherheit datenschutz dsgvo", a: "Deine Daten sind sicher! Sie werden anonym und ausschließlich für deinen persönlichen Übungsplan verwendet. Alles läuft über europäische Server mit höchsten ISO-zertifizierten Sicherheitsstandards — vollständig DSGVO-konform!" },
-  { q: "passwort vergessen zurücksetzen", a: "Kein Problem! Du kannst dein Passwort jederzeit selbst zurücksetzen. Klicke einfach auf 'Passwort vergessen?' in der App und folge den Anweisungen." },
+  // ── TROUBLESHOOTING: App Issues ──
+  { q: "app abstürzt absturz crash crashes freezes einfriert",
+    a: "Das tut mir leid! Versuche bitte folgende Schritte: Schließe die App komplett und öffne sie erneut. Falls das nicht hilft, prüfe im App Store ob ein Update verfügbar ist.",
+    followUps: ["App neu installieren", "Immer noch Probleme", "Problem melden"] },
+  { q: "app langsam slow laden lange dauert",
+    a: "Wenn die App langsam ist, hilft es oft die App zu schließen und neu zu starten. Prüfe auch deine Internetverbindung — am besten funktioniert es über WLAN!",
+    followUps: ["App neu starten hat geholfen", "Immer noch langsam", "Übungen laden nicht"] },
+  { q: "app neu installieren neuinstallation",
+    a: "Du kannst die App sicher deinstallieren und neu aus dem App Store laden. Keine Sorge — deine Daten und Fortschritte bleiben gespeichert, da sie mit deinem Konto verknüpft sind!",
+    followUps: ["Daten wirklich sicher?", "Wie melde ich mich wieder an?", "Problem melden"] },
+  { q: "app funktioniert nicht geht nicht startet nicht",
+    a: "Versuche bitte diese Schritte: Erstens, schließe die App komplett und starte sie neu. Zweitens, prüfe ob du die neueste Version hast. Drittens, starte dein Gerät einmal neu.",
+    followUps: ["Hat funktioniert!", "Problem besteht weiter", "App neu installieren"] },
+  { q: "update aktualisieren neue version",
+    a: "Gehe in den App Store, suche nach meiReha und tippe auf 'Aktualisieren'. Automatische Updates kannst du in deinen Geräte-Einstellungen aktivieren!",
+    followUps: ["Kein Update verfügbar", "Nach Update geht nichts mehr", "Problem melden"] },
+  { q: "bildschirm schwarz weiß display anzeige kaputt ui",
+    a: "Versuche die App komplett zu schließen und neu zu öffnen. Falls der Bildschirm weiterhin nicht richtig angezeigt wird, prüfe ob ein App-Update verfügbar ist.",
+    followUps: ["App neu starten", "App aktualisieren", "Problem melden"] },
 
-  // Support FAQ (from table)
-  { q: "registrieren anmelden", a: "Du kannst dich über E-Mail oder Einladungscode registrieren. Nach der Eingabe deiner Daten bekommst du eine Bestätigungs-Mail zur Aktivierung." },
-  { q: "zugangscode verloren", a: "Den Zugangscode kannst du beim Support oder über deine Einrichtung (z.B. Klinik oder Therapeut) erneut anfordern." },
-  { q: "einloggen login nicht möglich", a: "Prüfe ob E-Mail und Passwort korrekt sind. Du kannst das Passwort über 'Passwort vergessen' zurücksetzen. Bei weiteren Problemen hilft der Support!" },
-  { q: "app funktioniert nicht abstürzt absturz", a: "Versuche die App neu zu starten oder neu zu installieren. Prüfe ob du die neueste Version hast. Wenn es weiter nicht geht, kontaktiere den Support mit deinem Gerät und Betriebssystem." },
-  { q: "übungen laden nicht", a: "Prüfe deine Internetverbindung und starte die App neu. Falls es weiterhin nicht klappt, könnte es ein Serverproblem sein — informiere den Support!" },
-  { q: "wie starte ich therapie training", a: "Nach dem Login gehst du ins Dashboard, wählst deinen Trainingsplan und suchst dir eine Übung aus. Die Anleitung wird automatisch angezeigt!" },
-  { q: "wie oft übungen machen häufigkeit", a: "Die empfohlene Häufigkeit wird individuell in deinem Trainingsplan festgelegt, zum Beispiel täglich oder mehrmals pro Woche." },
-  { q: "übung verstehe ich nicht anleitung", a: "In der App gibt es Anleitungen und Videos zu den Übungen. Du kannst auch deinen Therapeuten kontaktieren oder den Support fragen!" },
-  { q: "fortschritte nicht gespeichert", a: "Prüfe ob deine Internetverbindung stabil ist und starte die App neu. Wenn weiterhin Daten fehlen, kontaktiere den Support." },
-  { q: "offline nutzen ohne internet", a: "Einige Inhalte sind offline verfügbar! Deine Fortschritte werden dann synchronisiert, sobald du wieder Internet hast." },
-  { q: "fortschritt sehen ergebnis", a: "Im Dashboard oder im Fortschrittsbereich kannst du deine absolvierten Übungen und deine Entwicklung sehen!" },
-  { q: "zugriff daten wer sieht", a: "Nur autorisierte Personen wie deine behandelnden Therapeuten haben Zugriff. Alle Daten werden DSGVO-konform verarbeitet." },
-  { q: "wie lange zugriff zugang", a: "Der Zugriff ist meist an die Dauer deiner Therapie gekoppelt. Die genaue Dauer wird dir bei Start mitgeteilt." },
-  { q: "mehrere geräte", a: "Ja! Du kannst dich auf mehreren Geräten einloggen, solange du dieselben Zugangsdaten verwendest." },
-  { q: "support kontaktieren hilfe", a: "Du erreichst den Support per E-Mail an support@nyra.health, über das Kontaktformular in der App oder über deine betreuende Einrichtung." },
-  { q: "zugangscode nicht erhalten", a: "Prüfe deinen Spam-Ordner! Falls du ihn nicht findest, frag bei deiner Klinik, Versicherung oder beim Support nach." },
-  { q: "account löschen", a: "Ja, über den Support kannst du eine vollständige Löschung deiner Daten beantragen." },
-  { q: "nicht kompatibel gerät alt", a: "Prüfe ob dein Gerät die Mindestanforderungen erfüllt: iOS sechzehn oder Android sechs. Bei älteren Geräten kann es leider Einschränkungen geben." },
+  // ── TROUBLESHOOTING: Exercises ──
+  { q: "übung starten geht nicht startet nicht exercise",
+    a: "Versuche die Übung zu schließen und neu zu starten. Gehe dazu zurück zum Dashboard und wähle die Übung erneut aus. Prüfe auch deine Internetverbindung!",
+    followUps: ["Übung neu starten", "Andere Übung wählen", "Alle Übungen betroffen"] },
+  { q: "übung neu starten restart exercise neustarten",
+    a: "Gehe zurück zum Dashboard, indem du oben links auf den Zurück-Pfeil tippst. Wähle dann die Übung erneut aus — sie startet von vorne!",
+    followUps: ["Hat geklappt!", "Übung reagiert nicht", "Problem melden"] },
+  { q: "übungen laden nicht loading fehler",
+    a: "Prüfe deine Internetverbindung und starte die App neu. Tipp: Schließe die App komplett über den App-Switcher und öffne sie erneut. Falls es weiterhin nicht klappt, könnte es ein Serverproblem sein.",
+    followUps: ["App neu starten", "Internet prüfen", "Problem melden"] },
+  { q: "übung verstehe ich nicht anleitung schwer schwierig",
+    a: "Kein Problem! Tippe auf das Fragezeichen-Symbol in der Übung — dort findest du eine Anleitung und oft auch ein Video. Du kannst auch deinen Therapeuten um Hilfe bitten.",
+    followUps: ["Andere Übung wählen", "Schwierigkeit anpassen", "Therapeut kontaktieren"] },
+  { q: "übung zu schwer zu leicht schwierigkeit level",
+    a: "Die App passt sich normalerweise automatisch an. Du kannst aber auch in den Einstellungen deinen Therapieplan anpassen oder deinen Therapeuten bitten, die Schwierigkeit zu ändern.",
+    followUps: ["Einstellungen öffnen", "Therapeut kontaktieren", "Wie funktioniert der Therapieplan?"] },
+  { q: "ton audio sound hören lautsprecher übung kein ton",
+    a: "Prüfe ob dein Gerät nicht auf stumm geschaltet ist und die Lautstärke hoch genug ist. Manche Übungen haben Audio-Anleitungen — stelle sicher, dass der Ton in der App aktiviert ist!",
+    followUps: ["Ton funktioniert jetzt", "Immer noch kein Ton", "Problem melden"] },
+
+  // ── TROUBLESHOOTING: Login & Account ──
+  { q: "einloggen login nicht möglich anmelden geht nicht",
+    a: "Prüfe ob deine E-Mail-Adresse und dein Passwort korrekt sind. Tipp: Achte auf Groß- und Kleinschreibung! Du kannst das Passwort über 'Passwort vergessen?' zurücksetzen.",
+    followUps: ["Passwort zurücksetzen", "E-Mail-Adresse vergessen", "Problem melden"] },
+  { q: "passwort vergessen zurücksetzen reset password",
+    a: "Kein Problem! Tippe auf dem Login-Bildschirm auf 'Passwort vergessen?'. Du bekommst dann eine E-Mail mit einem Link zum Zurücksetzen. Prüfe auch deinen Spam-Ordner!",
+    followUps: ["Keine E-Mail erhalten", "Spam-Ordner gecheckt", "Problem melden"] },
+  { q: "email adresse vergessen welche email konto",
+    a: "Deine E-Mail-Adresse findest du in der App unter Einstellungen > Mein Konto. Falls du nicht eingeloggt bist, frag bei deiner Klinik oder deinem Therapeuten nach — die haben deine Registrierungsdaten.",
+    followUps: ["Einstellungen öffnen", "Therapeut fragen", "Problem melden"] },
+  { q: "registrieren anmelden neues konto erstellen",
+    a: "Du kannst dich über E-Mail oder Einladungscode registrieren. Öffne die App und tippe auf 'Neuen Zugang erstellen'. Nach der Eingabe deiner Daten bekommst du eine Bestätigungs-Mail.",
+    followUps: ["Bestätigungs-Mail nicht erhalten", "Einladungscode eingeben", "Was ist ein Einladungscode?"] },
+  { q: "zugangscode verloren einladungscode code",
+    a: "Den Zugangscode kannst du bei deiner Klinik, deinem Therapeuten oder beim Support unter support@nyra.health erneut anfordern.",
+    followUps: ["Problem melden", "Ohne Code registrieren", "Was ist ein Zugangscode?"] },
+  { q: "zugangscode nicht erhalten bekommen",
+    a: "Prüfe zuerst deinen Spam-Ordner! Falls du den Code dort nicht findest, frag bei deiner Klinik, Versicherung oder beim Support unter support@nyra.health nach.",
+    followUps: ["Spam-Ordner gecheckt", "Problem melden", "Neue E-Mail anfordern"] },
+
+  // ── TROUBLESHOOTING: Settings & Navigation ──
+  { q: "einstellungen settings finden wo",
+    a: "Die Einstellungen findest du über das Zahnrad-Symbol oben rechts im Dashboard. Dort kannst du dein Profil, deine Benachrichtigungen und deinen Therapieplan verwalten.",
+    followUps: ["Profil bearbeiten", "Benachrichtigungen ändern", "Therapieplan anpassen"] },
+  { q: "profil bearbeiten name ändern",
+    a: "Gehe zu Einstellungen > Mein Konto. Dort kannst du deinen Namen und andere Profildaten bearbeiten.",
+    followUps: ["E-Mail ändern", "Passwort ändern", "Zurück zum Dashboard"] },
+  { q: "benachrichtigungen erinnerungen notifications",
+    a: "Du kannst Erinnerungen in den Einstellungen unter 'Benachrichtigungen' ein- und ausschalten. So wirst du regelmäßig an dein Training erinnert!",
+    followUps: ["Erinnerungen aktivieren", "Erinnerungen ausschalten", "Einstellungen öffnen"] },
+  { q: "sprache ändern language deutsch englisch",
+    a: "Die Spracheinstellungen findest du unter Einstellungen > Allgemein. Die App passt sich auch an die Spracheinstellung deines Geräts an.",
+    followUps: ["Einstellungen öffnen", "Übungen in anderer Sprache?", "Problem melden"] },
+
+  // ── TROUBLESHOOTING: Data & Sync ──
+  { q: "fortschritte nicht gespeichert verloren daten weg sync",
+    a: "Prüfe ob deine Internetverbindung stabil ist und starte die App neu. Deine Fortschritte werden automatisch gespeichert, sobald du wieder online bist. Falls weiterhin Daten fehlen, kontaktiere den Support.",
+    followUps: ["Internet prüfen", "App neu starten", "Problem melden"] },
+  { q: "offline nutzen ohne internet",
+    a: "Einige Inhalte sind offline verfügbar! Deine Fortschritte werden dann automatisch synchronisiert, sobald du wieder Internet hast.",
+    followUps: ["Welche Inhalte offline?", "Synchronisation klappt nicht", "Problem melden"] },
+  { q: "fortschritt sehen ergebnis statistik",
+    a: "Im Dashboard findest du den Fortschrittsbereich — dort siehst du deine absolvierten Übungen, deine Entwicklung über die Zeit und deine Erfolge!",
+    followUps: ["Wo ist das Dashboard?", "Fortschritte teilen", "Therapeut kontaktieren"] },
+
+  // ── TROUBLESHOOTING: Payment ──
+  { q: "zahlung payment bezahlung fehlgeschlagen nicht geklappt",
+    a: "Prüfe ob deine Zahlungsmethode im App Store aktuell ist. Gehe dazu in die Einstellungen deines Geräts > Apple-ID/Google-Konto > Zahlung. Bei weiteren Problemen hilft dir support@nyra.health.",
+    followUps: ["Zahlungsmethode prüfen", "Andere Zahlungsmethode", "Problem melden"] },
+  { q: "kosten kostenpflichtig preis was kostet",
+    a: "myReha bietet Premium-Abos: neunundsechzig Euro neunundneunzig pro Monat, dreiundsechzig Euro dreiunddreißig bei drei Monaten oder achtundfünfzig Euro dreiunddreißig bei sechs Monaten. Viele Krankenkassen übernehmen die Kosten!",
+    followUps: ["Übernimmt meine Krankenkasse?", "Welches Abo passt zu mir?", "Kostenlos testen"] },
+  { q: "krankenkasse übernehmen versicherung kostenübernahme",
+    a: "Ja! Zahlreiche Krankenkassen übernehmen die Kosten für myReha. Bei der Registrierung werden deine Angaben geprüft und du erfährst sofort, ob deine Kasse dabei ist.",
+    followUps: ["Wie beantrage ich das?", "Welche Kassen?", "Problem melden"] },
+  { q: "testphase kostenlos testen gratis free",
+    a: "Ja! Nach dem Download kannst du eine limitierte Basis-Version ganz ohne Zahlungsdaten und Kosten nutzen. So kannst du die App erstmal ausprobieren!",
+    followUps: ["Was ist im Basis-Abo?", "Auf Premium upgraden", "Was kostet Premium?"] },
+  { q: "premium abo vorteile upgrade",
+    a: "Das Premium-Abo bietet dir einen individuellen Therapieplan, Zugang zu über fünfundsechzigtausend Aufgaben und Echtzeit-Erfolgskontrolle. Du kannst es in den App-Einstellungen unter 'Abo' erwerben.",
+    followUps: ["Jetzt upgraden", "Was kostet es?", "Krankenkasse fragen"] },
+  { q: "welches abo nehmen empfehlung",
+    a: "Zum Schnuppern eignet sich das Einmonats-Abo. Für eine richtige Reha empfehle ich die drei- oder sechsmonatigen Abos — die sind auch günstiger pro Monat!",
+    followUps: ["Einmonats-Abo wählen", "Dreimonats-Abo wählen", "Krankenkasse fragen"] },
+  { q: "abo kündigen cancel subscription",
+    a: "Du kannst jederzeit kündigen — gehe dazu in die Einstellungen deines Geräts > Apple-ID/Google-Konto > Abonnements > myReha > Kündigen. Ganz einfach und ohne Probleme!",
+    followUps: ["Verliere ich meine Daten?", "Kann ich pausieren?", "Problem melden"] },
+  { q: "rechnung bezahlen invoice",
+    a: "Rechnungen kommen vom App Store-Anbieter und sind über deine Geräte-Einstellungen abrufbar. Bei Problemen schreibe direkt an support@nyra.health!",
+    followUps: ["Rechnung nicht gefunden", "Falsch abgebucht", "Problem melden"] },
+
+  // ── INFO: General ──
+  { q: "was ist myreha mereha meireha",
+    a: "myReha ist eine zertifizierte Medizin-App zum Trainieren von Gedächtnis, Sprache und Aufmerksamkeit. Du bekommst einen persönlichen Trainingsplan, der sich automatisch an dich anpasst!",
+    followUps: ["Für wen ist die App?", "Was kostet es?", "Wie starte ich?"] },
+  { q: "welche bereiche sprache gedächtnis",
+    a: "myReha deckt alle Sprach- und Kognitionstherapie-Bereiche ab: Aussprache, Lesen, Schreiben, Sprachverständnis, Gedächtnis, logisches Denken, Planung, Rechnen, Aufmerksamkeit und Wahrnehmung.",
+    followUps: ["Welche Übungen gibt es?", "Wie starte ich?", "Therapieplan erstellen"] },
+  { q: "welche erkrankungen schlaganfall parkinson",
+    a: "myReha kann bei Rehabilitation nach Schlaganfällen, Hirnblutungen, Multipler Sklerose, Morbus Parkinson, Schädel-Hirn-Trauma und anderen neurologischen Erkrankungen helfen.",
+    followUps: ["Für wen geeignet?", "Wie starte ich?", "Kostenlos testen"] },
+  { q: "für wen geeignet wer kann nutzen",
+    a: "myReha ist für Menschen mit Sprachstörungen wie Aphasie oder kognitiven Defiziten nach neurologischen Erkrankungen geeignet — unabhängig vom Schweregrad!",
+    followUps: ["Welche Erkrankungen?", "Brauche ich einen Therapeuten?", "Kostenlos testen"] },
+  { q: "wie bekomme ich die app download installieren",
+    a: "Lade myReha im Apple App Store oder Google Play Store herunter — suche einfach nach 'myReha'. Nach dem Download tippst du auf 'Neuen Zugang erstellen' und folgst der Registrierung!",
+    followUps: ["Geräteanforderungen?", "Registrierung hilfe", "Was kostet es?"] },
+  { q: "geräteanforderungen geräte kompatibel iphone ipad android",
+    a: "iPhones und iPads brauchen mindestens iOS sechzehn, Android-Geräte mindestens Android sechs. Auf neueren Geräten läuft die App am besten!",
+    followUps: ["Mein Gerät ist zu alt", "Auf mehreren Geräten nutzen?", "App herunterladen"] },
+  { q: "wie lange nutzen wie oft häufigkeit empfehlung",
+    a: "Wir empfehlen mindestens eine dreimonatige Rehaphase mit mindestens vier Stunden pro Woche. Langfristige Nutzung ist sehr sinnvoll — je regelmäßiger, desto besser!",
+    followUps: ["Wie starte ich?", "Therapieplan anpassen", "Fortschritte ansehen"] },
+  { q: "therapieplan übungsplan anpassen ändern",
+    a: "Der Plan passt sich automatisch an deinen Fortschritt an. Du kannst aber auch manuell Anpassungen vornehmen: Gehe zu Einstellungen > Therapieplan.",
+    followUps: ["Einstellungen öffnen", "Schwierigkeit ändern", "Therapeut kontaktieren"] },
+  { q: "ohne therapeuten arzt alleine selbstständig",
+    a: "Ja! Du kannst hochwertige Reha ganz selbstständig machen — von zu Hause aus oder sogar im Urlaub. Die App leitet dich durch alles!",
+    followUps: ["Wie starte ich?", "Therapieplan erstellen", "Kostenlos testen"] },
+  { q: "praxis therapeuten version klinik professional",
+    a: "Ja! Es gibt eine Praxis-Version für Therapeuten mit dem kompletten Übungskatalog aus über fünfundsechzigtausend Aufgaben und einem Fortschritts-Dashboard.",
+    followUps: ["Mehr Infos für Therapeuten", "Klinik-Zugang", "Problem melden"] },
+  { q: "mehrere geräte gleichzeitig verschiedene",
+    a: "Ja! Du kannst dich auf mehreren Geräten einloggen, solange du dieselben Zugangsdaten verwendest. Deine Fortschritte werden automatisch synchronisiert!",
+    followUps: ["Wie synchronisieren?", "Neues Gerät einrichten", "Zugangsdaten vergessen"] },
+  { q: "daten sicherheit datenschutz dsgvo privacy",
+    a: "Deine Daten sind sicher! Sie werden anonym und ausschließlich für deinen persönlichen Übungsplan verwendet. Alles läuft über europäische Server mit höchsten Sicherheitsstandards — vollständig DSGVO-konform!",
+    followUps: ["Wer sieht meine Daten?", "Account löschen", "Mehr zum Datenschutz"] },
+  { q: "zugriff daten wer sieht",
+    a: "Nur autorisierte Personen wie deine behandelnden Therapeuten haben Zugriff. Alle Daten werden DSGVO-konform verarbeitet.",
+    followUps: ["Datenschutz-Info", "Account löschen", "Problem melden"] },
+  { q: "account löschen konto entfernen",
+    a: "Du kannst eine vollständige Löschung deiner Daten beim Support beantragen. Schreibe einfach an support@nyra.health mit deiner Anfrage.",
+    followUps: ["Problem melden", "Was passiert mit meinen Daten?", "Abo vorher kündigen?"] },
+  { q: "nicht kompatibel gerät alt zu alt",
+    a: "Prüfe ob dein Gerät die Mindestanforderungen erfüllt: iOS sechzehn oder Android sechs. Bei älteren Geräten kann es leider Einschränkungen geben — ein Update des Betriebssystems könnte helfen!",
+    followUps: ["Gerät aktualisieren", "Anderes Gerät nutzen", "Problem melden"] },
+  { q: "support kontaktieren hilfe erreichen",
+    a: "Du erreichst den Support per E-Mail an support@nyra.health oder über das Kontaktformular in der App unter Einstellungen > Hilfe & Support.",
+    followUps: ["E-Mail schreiben", "In der App kontaktieren", "Häufige Fragen ansehen"] },
+  { q: "medizinprodukt zertifiziert ce kennzeichen",
+    a: "Ja! myReha hat ein CE-Kennzeichen als zertifiziertes Medizinprodukt. Das bedeutet, dass alle Sicherheits- und Gesundheitsanforderungen erfüllt sind.",
+    followUps: ["Was bedeutet das?", "Wer hat entwickelt?", "Mehr über myReha"] },
+  { q: "wer steckt dahinter gegründet team",
+    a: "myReha wurde von Dr. Philipp Schöllauf gegründet, zusammen mit einem Team aus Therapeuten und Ärzten, in Zusammenarbeit mit der Neurologischen Abteilung einer Klinik in Wien.",
+    followUps: ["Mehr über myReha", "Kontakt aufnehmen", "App herunterladen"] },
+
+  // ── Meta: Conversation flow ──
+  { q: "hat funktioniert geholfen danke gelöst",
+    a: "Super, das freut mich! Kann ich dir noch bei etwas anderem helfen?",
+    followUps: ["Nein, alles gut!", "Andere Frage", "Übungen starten"] },
+  { q: "immer noch problem nicht geholfen besteht weiter geht immer noch nicht",
+    a: "Das tut mir leid, dass es noch nicht klappt! Damit ich dir besser helfen kann: Kannst du mir beschreiben, was genau passiert? Zum Beispiel: Siehst du eine Fehlermeldung? Oder bleibt der Bildschirm einfach stehen?",
+    followUps: ["Fehlermeldung gesehen", "Bildschirm friert ein", "App schließt sich einfach", "Problem melden"] },
+  { q: "problem melden bug report fehler melden ticket",
+    a: "Ich erstelle gerne eine Meldung für unser Entwickler-Team! Beschreibe mir bitte kurz: Was hast du gemacht, als das Problem aufgetreten ist? Und was ist genau passiert?",
+    followUps: ["Bei einer Übung", "Beim Einloggen", "Im Dashboard", "Woanders"] },
+  { q: "fehlermeldung error fehler angezeigt",
+    a: "Danke für die Info! Weißt du noch, was in der Fehlermeldung stand? Auch nur ein Teil des Textes hilft unserem Team, das Problem schneller zu finden.",
+    followUps: ["Ich weiß es nicht mehr", "Problem melden", "Nochmal versuchen"] },
+  { q: "bildschirm friert ein hängt stuck frozen reagiert nicht",
+    a: "Das klingt nach einem Anzeigeproblem. Versuche bitte: Schließe die App komplett über den App-Switcher, warte ein paar Sekunden und öffne sie erneut. Bei welcher Funktion ist das passiert?",
+    followUps: ["Bei einer Übung", "Im Dashboard", "Gleich nach dem Start", "Problem melden"] },
+  { q: "app schließt sich einfach von alleine beendet",
+    a: "Wenn die App sich unerwartet schließt, hilft oft ein Update. Prüfe im App Store, ob eine neue Version verfügbar ist. Passiert es bei einer bestimmten Übung oder zufällig?",
+    followUps: ["Bei bestimmter Übung", "Passiert zufällig", "App aktualisieren", "Problem melden"] },
+  { q: "nein alles gut fertig tschüss",
+    a: "Wunderbar! Dann wünsche ich dir viel Erfolg beim Training. Bis bald!",
+    followUps: [] },
 ];
 
 const TONI_SYSTEM_PROMPT =
@@ -154,29 +291,27 @@ function findBestFaqMatch(message) {
 function generateToniResponse(message) {
   // Try FAQ match first
   const faqMatch = findBestFaqMatch(message);
-  if (faqMatch) return faqMatch.a;
+  if (faqMatch) return { text: faqMatch.a, followUps: faqMatch.followUps || [] };
 
   // Fallback: friendly responses
   const lower = message.toLowerCase();
 
   if (lower.match(/\b(hi|hello|hey|hallo|servus|grüß)\b/))
-    return "Hallo! Schön, dass du da bist! Wie kann ich dir helfen?";
+    return { text: "Hallo! Schön, dass du da bist! Wie kann ich dir helfen?", followUps: ["Übung funktioniert nicht", "Login-Problem", "Frage zur App"] };
   if (lower.match(/\b(danke|dankeschön|thank)/))
-    return "Gerne! Freut mich, wenn ich helfen konnte!";
+    return { text: "Gerne! Freut mich, wenn ich helfen konnte!", followUps: ["Andere Frage", "Übungen starten", "Nein, alles gut!"] };
   if (lower.match(/\b(tschüss|bye|ciao|auf wiedersehen)/))
-    return "Tschüss! Bis bald und viel Erfolg beim Training!";
+    return { text: "Tschüss! Bis bald und viel Erfolg beim Training!", followUps: [] };
   if (lower.match(/\b(wer bist du|who are you|was bist du)/))
-    return "Ich bin Toni, dein freundlicher Helfer in der myReha App! Ich beantworte gerne deine Fragen rund um die App.";
+    return { text: "Ich bin Toni, dein freundlicher Helfer in der myReha App! Ich beantworte gerne deine Fragen rund um die App.", followUps: ["Was kann die App?", "Wie starte ich?", "Ich habe ein Problem"] };
   if (lower.match(/\b(hilfe|help|was kannst du)/))
-    return "Ich kann dir bei Fragen zur myReha App helfen! Frag mich zum Beispiel zu Übungen, Kosten, Datenschutz oder technischen Problemen.";
+    return { text: "Ich kann dir bei Fragen zur myReha App helfen! Frag mich zum Beispiel zu Übungen, Kosten oder technischen Problemen.", followUps: ["Übung funktioniert nicht", "Kosten & Abo", "App-Problem melden"] };
 
-  // Generic fallback
-  const fallbacks = [
-    "Hmm, da bin ich mir nicht ganz sicher. Versuch es doch mal beim Support unter support@nyra.health — die helfen dir bestimmt weiter!",
-    "Das ist eine gute Frage! Für eine genaue Antwort wende dich am besten an support@nyra.health.",
-    "Oh, da muss ich passen! Aber der Support unter support@nyra.health kann dir sicher weiterhelfen!",
-  ];
-  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+  // Generic fallback — ask for details instead of sending to support
+  return {
+    text: "Kannst du mir etwas genauer beschreiben, was passiert ist? Dann kann ich dir besser helfen! Zum Beispiel: Was hast du gemacht, als das Problem aufgetreten ist?",
+    followUps: ["App stürzt ab", "Übung lädt nicht", "Login geht nicht", "Etwas anderes"]
+  };
 }
 
 // No agent creation needed — configured in ElevenLabs dashboard
@@ -218,12 +353,12 @@ app.post("/api/chat", async (req, res) => {
     chatHistory.push({ role: "user", content: message });
     if (chatHistory.length > 20) chatHistory.splice(0, 2);
 
-    const response = generateToniResponse(message);
-    chatHistory.push({ role: "assistant", content: response });
+    const result = generateToniResponse(message);
+    chatHistory.push({ role: "assistant", content: result.text });
 
     // Convert response to speech
     const audioStream = await elevenlabs.textToSpeech.convert(voice.id, {
-      text: response,
+      text: result.text,
       modelId: "eleven_flash_v2_5",
     });
 
@@ -234,7 +369,8 @@ app.post("/api/chat", async (req, res) => {
     const audioBuffer = Buffer.concat(chunks);
 
     res.json({
-      response,
+      response: result.text,
+      followUps: result.followUps || [],
       audio: audioBuffer.toString("base64"),
       contentType: "audio/mpeg",
     });
