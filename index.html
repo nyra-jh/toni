@@ -324,6 +324,34 @@
       line-height: 1;
     }
 
+    /* ── Close Chat Button ── */
+    .close-chat-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-m);
+      padding: var(--space-xl) 0;
+      align-self: center;
+    }
+    .close-chat-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-s);
+      padding: 12px var(--space-xxl);
+      border: none;
+      border-radius: var(--cr-30);
+      background: var(--btn-primary);
+      color: var(--text-on-primary);
+      font-family: var(--font-family);
+      font-size: var(--body-medium);
+      font-weight: var(--weight-semibold);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .close-chat-btn:hover { background: var(--btn-primary-hover); }
+    .close-chat-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
     /* ── Follow-up Chips (in chat) ── */
     .follow-up-chips {
       display: flex;
@@ -948,7 +976,12 @@
 
     function showFollowUpChips(chips) {
       removeFollowUpChips();
-      if (!chips || chips.length === 0) return;
+
+      // No follow-ups = conversation ended → show close button
+      if (!chips || chips.length === 0) {
+        showCloseChat();
+        return;
+      }
 
       const container = document.createElement('div');
       container.id = 'follow-up-chips';
@@ -967,6 +1000,34 @@
 
       messagesArea.appendChild(container);
       messagesArea.scrollTop = messagesArea.scrollHeight;
+    }
+
+    function showCloseChat() {
+      const container = document.createElement('div');
+      container.id = 'follow-up-chips';
+      container.className = 'close-chat-container';
+
+      const btn = document.createElement('button');
+      btn.className = 'close-chat-btn';
+      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg> Chat schließen`;
+      btn.onclick = () => closeChat();
+      container.appendChild(btn);
+
+      messagesArea.appendChild(container);
+      messagesArea.scrollTop = messagesArea.scrollHeight;
+    }
+
+    function closeChat() {
+      // Notify native app to close the WebView
+      if (window.webkit?.messageHandlers?.toni) {
+        window.webkit.messageHandlers.toni.postMessage({ type: 'close' });
+      }
+      // Fallback for browser: reset the chat
+      if (!window.webkit?.messageHandlers?.toni) {
+        messagesArea.innerHTML = '';
+        quickReplies.style.display = '';
+        addMessage('Hi there! I\'m here to help you report any issues you\'re experiencing. What seems to be not working in the app?', 'toni');
+      }
     }
 
     // =============================================
@@ -1009,8 +1070,8 @@
         removeTypingIndicator();
         addMessage(data.response, 'toni', data.audio || null);
 
-        // Show follow-up chips if provided
-        if (data.followUps && data.followUps.length > 0) {
+        // Show follow-up chips, or close button if conversation ended
+        if (data.followUps) {
           showFollowUpChips(data.followUps);
         }
 
